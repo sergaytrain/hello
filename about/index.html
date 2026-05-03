@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>О проекте — Hello!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --bg-primary: #f2f2f7;
+      --bg-card: rgba(255, 255, 255, 0.72);
+      --text-primary: #1c1c1e;
+      --text-secondary: #6e6e73;
+      --accent: #007aff;
+      --separator: rgba(60, 60, 67, 0.12);
+      --shadow: 0 8px 32px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
+      --blur: saturate(180%) blur(30px);
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius-card: 20px;
+    }
+    body.dark {
+      --bg-primary: #000000;
+      --bg-card: rgba(28,28,30,0.82);
+      --text-primary: #ffffff;
+      --text-secondary: #aeaeb2;
+      --accent: #0a84ff;
+      --separator: rgba(84,84,88,0.5);
+      --shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+    }
+    body {
+      font-family: -apple-system, 'Helvetica Neue', 'SF Pro Text', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition), color var(--transition);
+      overflow: hidden;
+      padding: 20px;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 560px;
+      height: 100%;
+      max-height: 750px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeSlideIn 0.6s cubic-bezier(0.23,1,0.32,1);
+    }
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      flex-shrink: 0;
+    }
+    .logo-link {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 1.3rem;
+      font-weight: 650;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--accent);
+      margin-left: 18px;
+      font-weight: 500;
+    }
+    .about-card {
+      background: var(--bg-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--border-radius-card);
+      padding: 40px 28px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      margin: auto 0;
+    }
+    .about-card h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .about-card p {
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: 20px;
+      background: rgba(0,122,255,0.08);
+      transition: background 0.2s;
+    }
+    .back-btn:hover {
+      background: rgba(0,122,255,0.16);
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      padding-bottom: 6px;
+    }
+  </style>
+</head>
+<body class="light">
+<div class="app-container">
+  <div class="navbar">
+    <a href="../index.html" class="logo-link">👋 Hello!</a>
+    <div class="nav-links">
+      <a href="../settings/">Настройки</a>
+      <a href="../about/">О проекте</a>
+    </div>
+  </div>
+
+  <div class="about-card">
+    <h2>О разработчике</h2>
+    <p>
+      Hello! — это минималистичная стартовая страница, вдохновленная простотой и скоростью.
+      Проект создан для тех, кто ценит эстетику iOS и мгновенный доступ к поиску.
+    </p>
+    <p style="font-size:0.85rem;">
+      Версия 1.0 · Дизайн и разработка — команда Hello.
+    </p>
+    <a href="../settings/" class="back-btn">← Настройки</a>
+  </div>
+
+  <div class="footer">2026, «hello!».</div>
+</div>
+
+<script>
+  (function() {
+    const savedTheme = localStorage.getItem('hello-theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    } else {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+    }
+  })();
+</script>
+</body>
+</html>
