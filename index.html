@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Hello! — Новая вкладка</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #f2f2f7;
+      --bg-card: rgba(255, 255, 255, 0.72);
+      --text-primary: #1c1c1e;
+      --text-secondary: #6e6e73;
+      --accent: #007aff;
+      --separator: rgba(60, 60, 67, 0.12);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+      --blur: saturate(180%) blur(30px);
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius-card: 20px;
+      --border-radius-element: 12px;
+      --nav-height: 56px;
+    }
+
+    body.dark {
+      --bg-primary: #000000;
+      --bg-card: rgba(28, 28, 30, 0.82);
+      --text-primary: #ffffff;
+      --text-secondary: #aeaeb2;
+      --accent: #0a84ff;
+      --separator: rgba(84, 84, 88, 0.5);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: -apple-system, 'Helvetica Neue', 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--transition), color var(--transition);
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Общий контейнер для всех экранов */
+    .app-container {
+      width: 100%;
+      max-width: 560px;
+      height: 100%;
+      max-height: 750px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeSlideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @keyframes fadeSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Навигация */
+    .navbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      margin-bottom: 12px;
+      background: transparent;
+      backdrop-filter: none;
+      border-radius: 0;
+      flex-shrink: 0;
+    }
+
+    .logo-link {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 1.375rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .logo-link:hover {
+      opacity: 0.8;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: transparent;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: -0.01em;
+    }
+    .nav-links a:hover {
+      background: rgba(0, 122, 255, 0.12);
+    }
+
+    /* Основной контент */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      gap: 28px;
+      margin-top: -20px;
+    }
+
+    /* Главная: большой логотип */
+    .big-logo {
+      font-size: 4.2rem;
+      font-weight: 580;
+      letter-spacing: -0.04em;
+      color: var(--text-primary);
+      text-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      animation: logoReveal 0.7s ease-out;
+    }
+    @keyframes logoReveal {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Поисковая строка */
+    .search-wrapper {
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--border-radius-element);
+      box-shadow: var(--shadow);
+      padding: 14px 18px;
+      transition: all var(--transition);
+      border: 1px solid transparent;
+    }
+    .search-wrapper:focus-within {
+      transform: scale(1.02);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+      border-color: rgba(0,122,255,0.3);
+      background: rgba(255,255,255,0.85);
+    }
+    body.dark .search-wrapper:focus-within {
+      background: rgba(44,44,46,0.92);
+      border-color: rgba(10,132,255,0.5);
+    }
+
+    .search-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      outline: none;
+      letter-spacing: -0.01em;
+    }
+    .search-input::placeholder {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Футер */
+    .footer {
+      flex-shrink: 0;
+      text-align: center;
+      padding: 18px 0 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 450;
+      width: 100%;
+    }
+    .footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--text-secondary);
+      transition: color 0.2s;
+    }
+    .footer a:hover {
+      color: var(--accent);
+    }
+
+    /* ----- СТИЛИ ДЛЯ НАСТРОЕК (и карточек) ----- */
+    .settings-list {
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--border-radius-card);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--separator);
+      transition: background 0.2s;
+      cursor: default;
+    }
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+    .settings-item.clickable {
+      cursor: pointer;
+    }
+    .settings-item.clickable:hover {
+      background: rgba(0, 122, 255, 0.06);
+    }
+
+    .settings-label {
+      font-size: 1rem;
+      font-weight: 450;
+      letter-spacing: -0.01em;
+    }
+    .settings-value {
+      color: var(--text-secondary);
+      font-weight: 450;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chevron {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-left: 4px;
+      opacity: 0.7;
+    }
+
+    /* iOS toggle */
+    .ios-toggle {
+      position: relative;
+      width: 51px;
+      height: 31px;
+      background: #e9e9ea;
+      border-radius: 31px;
+      transition: background 0.3s;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .ios-toggle.active {
+      background: #34c759;
+    }
+    .ios-toggle::after {
+      content: "";
+      position: absolute;
+      width: 27px;
+      height: 27px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .ios-toggle.active::after {
+      transform: translateX(20px);
+    }
+
+    /* Сегментированный контрол (язык) */
+    .segment-control {
+      display: flex;
+      background: rgba(120, 120, 128, 0.16);
+      border-radius: 8px;
+      padding: 2px;
+      width: fit-content;
+      margin: 6px 0;
+      backdrop-filter: blur(10px);
+    }
+    .segment-option {
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.25s;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    .segment-option.active {
+      background: var(--bg-card);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      font-weight: 590;
+      backdrop-filter: blur(20px);
+    }
+
+    /* Радио кнопки стилизованные */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--text-secondary);
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .radio-circle.selected {
+      border-color: var(--accent);
+    }
+    .radio-circle.selected::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pop 0.2s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      align-self: flex-start;
+    }
+
+    .about-card {
+      text-align: center;
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-radius: var(--border-radius-card);
+      padding: 36px 24px;
+      box-shadow: var(--shadow);
+    }
+  </style>
+</head>
+<body class="light">
+  <div class="app-container">
+    <div class="navbar">
+      <a href="index.html" class="logo-link">
+        <span style="font-size:1.5rem;">👋</span> Hello!
+      </a>
+      <div class="nav-links">
+        <a href="settings/">Настройки</a>
+        <a href="about/">О проекте</a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="big-logo">Hello!</div>
+      <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Введите ваш запрос." id="searchInput">
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>2026, <a href="about/">«hello!»</a>.</p>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Применение темы при загрузке
+      const savedTheme = localStorage.getItem('hello-theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
+      } else {
+        document.body.classList.add('light');
+        document.body.classList.remove('dark');
+      }
+
+      // Обработка Enter в поиске (для демонстрации, будет использовать систему по умолчанию позже)
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            const query = e.target.value.trim();
+            if (query) {
+              const engine = localStorage.getItem('hello-search-engine') || 'google';
+              const urls = {
+                yandex: 'https://yandex.ru/search/?text=',
+                google: 'https://www.google.com/search?q=',
+                brave: 'https://search.brave.com/search?q=',
+                bing: 'https://www.bing.com/search?q=',
+                yahoo: 'https://search.yahoo.com/search?p=',
+                baidu: 'https://www.baidu.com/s?wd=',
+                '360search': 'https://www.so.com/s?q=',
+                shenma: 'https://m.sm.cn/s?q='
+              };
+              const url = (urls[engine] || urls.google) + encodeURIComponent(query);
+              window.location.href = url;
+            }
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
