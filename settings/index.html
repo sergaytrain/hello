@@ -1,190 +1,178 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Настройки — Hello!</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Настройки — Hello!</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --bg-primary:#f2f2f7; --bg-card:rgba(255,255,255,0.6); --text-primary:#1c1c1e;
+            --text-secondary:#6e6e73; --accent:#6C5CE7; --accent-glow:rgba(108,92,231,0.3);
+            --separator:rgba(60,60,67,0.12); --shadow:0 8px 32px rgba(0,0,0,0.06);
+            --blur:saturate(220%) blur(40px); --transition:0.35s; --menu-bg:rgba(255,255,255,0.9);
+            --nav-bg:rgba(255,255,255,0.2);
+        }
+        body.dark {
+            --bg-primary:#000; --bg-card:rgba(28,28,30,0.65); --text-primary:#fff;
+            --text-secondary:#aeaeb2; --accent:#8B7CF7; --accent-glow:rgba(139,124,247,0.35);
+            --separator:rgba(84,84,88,0.5); --shadow:0 8px 32px rgba(0,0,0,0.5);
+            --menu-bg:rgba(28,28,30,0.92); --nav-bg:rgba(28,28,30,0.3);
+        }
+        body {
+            font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary);
+            color:var(--text-primary); height:100vh; display:flex; align-items:center; justify-content:center;
+            transition:background var(--transition); overflow:hidden; padding:20px;
+        }
+        .app-container {
+            width:100%; max-width:560px; height:100%; max-height:750px; display:flex;
+            flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease;
+        }
+        @keyframes fadeSlideIn { 0%{opacity:0;transform:translateY(12px);} 100%{opacity:1;transform:translateY(0);} }
 
-    :root {
-      --bg-primary:#f2f2f7; --bg-card:rgba(255,255,255,0.6); --text-primary:#1c1c1e;
-      --text-secondary:#6e6e73; --accent:#007aff; --separator:rgba(60,60,67,0.12);
-      --shadow:0 8px 32px rgba(0,0,0,0.06); --blur:saturate(220%) blur(40px);
-      --transition:0.35s; --menu-bg:rgba(255,255,255,0.9);
-    }
-    body.dark {
-      --bg-primary:#000; --bg-card:rgba(28,28,30,0.65); --text-primary:#fff;
-      --text-secondary:#aeaeb2; --accent:#0a84ff; --separator:rgba(84,84,88,0.5);
-      --shadow:0 8px 32px rgba(0,0,0,0.5); --menu-bg:rgba(28,28,30,0.92);
-    }
-    body {
-      font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary);
-      color:var(--text-primary); height:100vh; display:flex; align-items:center; justify-content:center;
-      transition:background var(--transition); overflow:hidden; padding:20px;
-    }
-    .app-container {
-      width:100%; max-width:560px; height:100%; max-height:750px; display:flex;
-      flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease;
-    }
-    @keyframes fadeSlideIn { 0%{opacity:0;transform:translateY(12px);} 100%{opacity:1;transform:translateY(0);} }
+        .navbar { display:flex; justify-content:space-between; align-items:center; padding:8px 0; flex-shrink:0; z-index:20; }
+        .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.375rem; font-weight:650;
+            backdrop-filter:blur(10px); background:var(--nav-bg); padding:6px 16px; border-radius:20px; box-shadow:0 0 10px var(--accent-glow); }
+        .nav-links { display:flex; gap:12px; backdrop-filter:blur(10px); background:var(--nav-bg); padding:4px; border-radius:24px; box-shadow:0 0 8px var(--accent-glow); }
+        .nav-links a { text-decoration:none; color:var(--text-primary); font-weight:500; font-size:0.95rem; padding:8px 16px; border-radius:20px; }
+        .nav-links a:hover { background:var(--accent); color:white; }
+        .burger-btn { display:none; flex-direction:column; width:44px; height:44px; background:transparent; border:none; gap:5px; padding:8px; cursor:pointer; }
+        .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; }
+        .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+        .burger-btn.open span:nth-child(2){opacity:0;}
+        .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+        .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:0.35s;z-index:18;}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible;}
+        .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:var(--menu-bg);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;}
+        .mobile-menu.active{right:0;}
+        .mobile-menu a{font-size:1.3rem;color:var(--text-primary);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--separator);}
 
-    /* Навбар идентичный */
-    .navbar { display:flex; justify-content:space-between; align-items:center; padding:8px 0; flex-shrink:0; z-index:20; }
-    .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.375rem; font-weight:650;
-      backdrop-filter:blur(10px); background:rgba(255,255,255,0.2); padding:6px 16px; border-radius:20px; }
-    .nav-links { display:flex; gap:12px; backdrop-filter:blur(10px); background:rgba(255,255,255,0.15); padding:4px; border-radius:24px; }
-    .nav-links a { text-decoration:none; color:var(--text-primary); font-weight:500; font-size:0.95rem; padding:8px 16px; border-radius:20px; }
-    .nav-links a:hover { background:rgba(0,122,255,0.15); color:var(--accent); }
-    .burger-btn { display:none; flex-direction:column; width:44px; height:44px; background:transparent; border:none; gap:5px; padding:8px; cursor:pointer; }
-    .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; }
-    .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-    .burger-btn.open span:nth-child(2){opacity:0;}
-    .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:0.35s;z-index:18;}
-    .mobile-menu-overlay.active{opacity:1;visibility:visible;}
-    .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:var(--menu-bg);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;}
-    .mobile-menu.active{right:0;}
-    .mobile-menu a{font-size:1.3rem;color:var(--text-primary);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--separator);}
-
-    /* Контент */
-    .main-content { flex:1; display:flex; flex-direction:column; justify-content:center; width:100%; }
-    .page-title { font-size:1.6rem; font-weight:600; margin-bottom:16px; }
-
-    .settings-list {
-      background:var(--bg-card); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
-      border-radius:24px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden;
-      margin-bottom:12px;
-    }
-    .settings-item { display:flex; align-items:center; justify-content:space-between; padding:15px 18px; border-bottom:1px solid var(--separator); }
-    .settings-item:last-child{border-bottom:none;}
-    .ios-toggle { width:51px; height:31px; background:#e9e9ea; border-radius:31px; position:relative; cursor:pointer; flex-shrink:0; }
-    .ios-toggle.active { background:#34c759; }
-    .ios-toggle::after { content:""; position:absolute; width:27px; height:27px; background:white; border-radius:50%; top:2px; left:2px; transition:0.25s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
-    .ios-toggle.active::after { transform:translateX(20px); }
-    .segment-control { display:flex; background:rgba(120,120,128,0.16); border-radius:8px; padding:2px; }
-    .segment-option { padding:6px 14px; border-radius:7px; font-size:0.9rem; background:transparent; border:none; color:var(--text-primary); cursor:pointer; }
-    .segment-option.active { background:var(--bg-card); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
-    .radio-group { display:flex; flex-direction:column; gap:2px; width:100%; }
-    .radio-option { display:flex; align-items:center; padding:8px 0; cursor:pointer; }
-    .radio-circle { width:20px; height:20px; border-radius:50%; border:2px solid var(--text-secondary); margin-right:12px; display:flex; align-items:center; justify-content:center; }
-    .radio-circle.selected { border-color:var(--accent); }
-    .radio-circle.selected::after { content:""; width:12px; height:12px; background:var(--accent); border-radius:50%; animation:pop 0.2s; }
-    @keyframes pop{0%{transform:scale(0);}80%{transform:scale(1.2);}100%{transform:scale(1);}}
-    .footer { text-align:center; font-size:0.8rem; color:var(--text-secondary); flex-shrink:0; padding-bottom:6px; }
-    @media(max-width:600px){body{padding:16px;}.nav-links{display:none;}.burger-btn{display:flex;}.app-container{max-height:100%;}}
-  </style>
+        .main-content { flex:1; display:flex; flex-direction:column; justify-content:center; width:100%; }
+        .page-title { font-size:1.6rem; font-weight:600; margin-bottom:16px; }
+        .settings-list {
+            background:var(--bg-card); backdrop-filter:var(--blur); border-radius:24px; box-shadow:var(--shadow),0 0 15px var(--accent-glow);
+            display:flex; flex-direction:column; overflow:hidden; margin-bottom:12px;
+        }
+        .settings-item { display:flex; align-items:center; justify-content:space-between; padding:15px 18px; border-bottom:1px solid var(--separator); }
+        .settings-item:last-child{border-bottom:none;}
+        .ios-toggle { width:51px; height:31px; background:#e9e9ea; border-radius:31px; position:relative; cursor:pointer; flex-shrink:0; }
+        .ios-toggle.active { background:#34c759; }
+        .ios-toggle::after { content:""; position:absolute; width:27px; height:27px; background:white; border-radius:50%; top:2px; left:2px; transition:0.25s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+        .ios-toggle.active::after { transform:translateX(20px); }
+        .segment-control { display:flex; background:rgba(120,120,128,0.16); border-radius:8px; padding:2px; }
+        .segment-option { padding:6px 14px; border-radius:7px; font-size:0.9rem; background:transparent; border:none; color:var(--text-primary); cursor:pointer; }
+        .segment-option.active { background:var(--bg-card); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+        .radio-group { display:flex; flex-direction:column; gap:2px; width:100%; }
+        .radio-option { display:flex; align-items:center; padding:8px 0; cursor:pointer; }
+        .radio-circle { width:20px; height:20px; border-radius:50%; border:2px solid var(--text-secondary); margin-right:12px; display:flex; align-items:center; justify-content:center; }
+        .radio-circle.selected { border-color:var(--accent); }
+        .radio-circle.selected::after { content:""; width:12px; height:12px; background:var(--accent); border-radius:50%; animation:pop 0.2s; }
+        @keyframes pop{0%{transform:scale(0);}80%{transform:scale(1.2);}100%{transform:scale(1);}}
+        .footer { text-align:center; font-size:0.8rem; color:var(--text-secondary); flex-shrink:0; padding-bottom:6px; }
+        .footer a { color:var(--accent); text-decoration:none; }
+        @media(max-width:600px){body{padding:16px;}.nav-links{display:none;}.burger-btn{display:flex;}.app-container{max-height:100%;}}
+    </style>
 </head>
 <body class="light">
 <div class="app-container">
-  <div class="navbar">
-    <a href="../index.html" class="logo-link">👋 Hello!</a>
-    <div class="nav-links">
-      <a href="../settings/">Настройки</a>
-      <a href="../about/">О проекте</a>
-    </div>
-    <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
-  </div>
-
-  <div class="main-content">
-    <div class="page-title">Настройки</div>
-
-    <div class="settings-list">
-      <div class="settings-item"><span>Тема</span><div class="ios-toggle" id="themeToggle"></div></div>
-      <div class="settings-item"><span>Динамичный фон</span><div class="ios-toggle" id="dynamicBgToggle"></div></div>
-    </div>
-
-    <div class="settings-list">
-      <div class="settings-item" style="flex-direction:column; align-items:flex-start; gap:12px;">
-        <span>Язык</span>
-        <div class="segment-control" id="languageSelector">
-          <button class="segment-option" data-lang="ru">Русский</button>
-          <button class="segment-option" data-lang="en">English</button>
-          <button class="segment-option" data-lang="zh">中文</button>
+    <div class="navbar">
+        <a href="../index.html" class="logo-link">👋 Hello!</a>
+        <div class="nav-links">
+            <a href="../news/">Новости</a>
+            <a href="../settings/">Настройки</a>
+            <a href="../about/">О проекте</a>
         </div>
-      </div>
+        <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
     </div>
 
-    <div class="settings-list">
-      <div class="settings-item" style="flex-direction:column; align-items:flex-start; gap:8px;">
-        <span>Система поиска</span>
-        <div class="radio-group" id="engineContainer"></div>
-      </div>
+    <div class="main-content">
+        <div class="page-title">Настройки</div>
+        <div class="settings-list">
+            <div class="settings-item"><span>Тема</span><div class="ios-toggle" id="themeToggle"></div></div>
+            <div class="settings-item"><span>Динамичный фон</span><div class="ios-toggle" id="dynamicBgToggle"></div></div>
+        </div>
+        <div class="settings-list">
+            <div class="settings-item" style="flex-direction:column; align-items:flex-start; gap:12px;">
+                <span>Язык</span>
+                <div class="segment-control" id="languageSelector">
+                    <button class="segment-option" data-lang="ru">Русский</button>
+                    <button class="segment-option" data-lang="en">English</button>
+                    <button class="segment-option" data-lang="zh">中文</button>
+                </div>
+            </div>
+        </div>
+        <div class="settings-list">
+            <div class="settings-item" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                <span>Система поиска</span>
+                <div class="radio-group" id="engineContainer"></div>
+            </div>
+        </div>
+        <a href="../about/" style="text-decoration:none; color:inherit;">
+            <div class="settings-list">
+                <div class="settings-item" style="cursor:pointer;"><span>О разработчике</span><span style="color:var(--text-secondary);">›</span></div>
+            </div>
+        </a>
     </div>
-
-    <a href="../about/" style="text-decoration:none; color:inherit;">
-      <div class="settings-list">
-        <div class="settings-item" style="cursor:pointer;"><span>О разработчике</span><span style="color:var(--text-secondary);">›</span></div>
-      </div>
-    </a>
-  </div>
-
-  <div class="footer">2026, hello!</div>
+    <div class="footer">2026, <a href="../about/">hello!</a></div>
 </div>
-
 <div class="mobile-menu-overlay" id="overlay"></div>
-<div class="mobile-menu" id="mobileMenu"><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
+<div class="mobile-menu" id="mobileMenu"><a href="../news/">Новости</a><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
 
 <script>
-  (()=>{
-    const body=document.body;
-    const themeToggle=document.getElementById('themeToggle');
-    const dynamicBgToggle=document.getElementById('dynamicBgToggle');
-    const engineContainer=document.getElementById('engineContainer');
-    const allEngines={yandex:'Яндекс',google:'Google',brave:'Brave Search',bing:'Bing',yahoo:'Yahoo!',baidu:'Baidu','360search':'360 Search',shenma:'Shenma'};
-    const china=['baidu','360search','shenma'];
-    const def=['yandex','google','brave','bing','yahoo'];
-
-    const getLang=()=>localStorage.getItem('hello-lang')||'ru';
-    const getTheme=()=>localStorage.getItem('hello-theme')||'light';
-    const getEngine=()=>localStorage.getItem('hello-search-engine')||'google';
-    const getDynamicBg=()=>localStorage.getItem('hello-dynamic-bg')!=='false';
-
-    function applyTheme(){
-      if(getTheme()==='dark'){body.classList.add('dark');themeToggle?.classList.add('active');}
-      else{body.classList.remove('dark');themeToggle?.classList.remove('active');}
-    }
-    function applyDynamicBg(){
-      if(dynamicBgToggle) dynamicBgToggle.classList.toggle('active', getDynamicBg());
-    }
-    function renderEngines(){
-      if(!engineContainer)return;
-      const lang=getLang(); const cur=getEngine();
-      const list=(lang==='zh')?china:def;
-      engineContainer.innerHTML=list.map(k=>`<div class="radio-option" data-engine="${k}"><div class="radio-circle ${cur===k?'selected':''}"></div><span>${allEngines[k]}</span></div>`).join('');
-      document.querySelectorAll('.radio-option').forEach(o=>o.addEventListener('click',function(){
-        localStorage.setItem('hello-search-engine',this.dataset.engine); renderEngines();
-      }));
-    }
-    function applyLangUI(){
-      document.querySelectorAll('.segment-option').forEach(b=>b.classList.toggle('active',b.dataset.lang===getLang()));
-      renderEngines();
-    }
-
-    themeToggle?.addEventListener('click',()=>{
-      const n=(getTheme()==='dark'?'light':'dark'); localStorage.setItem('hello-theme',n); applyTheme();
-    });
-    dynamicBgToggle?.addEventListener('click',()=>{
-      const cur=getDynamicBg(); localStorage.setItem('hello-dynamic-bg',!cur); applyDynamicBg();
-    });
-    document.getElementById('languageSelector')?.addEventListener('click',e=>{
-      if(e.target.classList.contains('segment-option')){
-        const l=e.target.dataset.lang; localStorage.setItem('hello-lang',l);
-        if(l==='zh'&&!china.includes(getEngine())) localStorage.setItem('hello-search-engine','baidu');
-        else if(l!=='zh'&&china.includes(getEngine())) localStorage.setItem('hello-search-engine','google');
-        applyLangUI();
-      }
-    });
-
-    const burger=document.getElementById('burgerBtn'), overlay=document.getElementById('overlay'), menu=document.getElementById('mobileMenu');
-    function open(){burger.classList.add('open');overlay.classList.add('active');menu.classList.add('active');}
-    function close(){burger.classList.remove('open');overlay.classList.remove('active');menu.classList.remove('active');}
-    burger?.addEventListener('click',()=>menu.classList.contains('active')?close():open());
-    overlay?.addEventListener('click',close);
-    menu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
-
-    applyTheme(); applyDynamicBg(); applyLangUI();
-  })();
+    (()=>{
+        const body=document.body;
+        const themeToggle=document.getElementById('themeToggle');
+        const dynamicBgToggle=document.getElementById('dynamicBgToggle');
+        const engineContainer=document.getElementById('engineContainer');
+        const allEngines={yandex:'Яндекс',google:'Google',brave:'Brave Search',bing:'Bing',yahoo:'Yahoo!',baidu:'Baidu','360search':'360 Search',shenma:'Shenma'};
+        const china=['baidu','360search','shenma'];
+        const def=['yandex','google','brave','bing','yahoo'];
+        const getLang=()=>localStorage.getItem('hello-lang')||'ru';
+        const getTheme=()=>localStorage.getItem('hello-theme')||'light';
+        const getEngine=()=>localStorage.getItem('hello-search-engine')||'google';
+        const getDynamicBg=()=>localStorage.getItem('hello-dynamic-bg')!=='false';
+        function applyTheme(){
+            if(getTheme()==='dark'){body.classList.add('dark');themeToggle?.classList.add('active');}
+            else{body.classList.remove('dark');themeToggle?.classList.remove('active');}
+        }
+        function applyDynamicBg(){
+            if(dynamicBgToggle) dynamicBgToggle.classList.toggle('active', getDynamicBg());
+        }
+        function renderEngines(){
+            if(!engineContainer)return;
+            const lang=getLang(); const cur=getEngine();
+            const list=(lang==='zh')?china:def;
+            engineContainer.innerHTML=list.map(k=>`<div class="radio-option" data-engine="${k}"><div class="radio-circle ${cur===k?'selected':''}"></div><span>${allEngines[k]}</span></div>`).join('');
+            document.querySelectorAll('.radio-option').forEach(o=>o.addEventListener('click',function(){
+                localStorage.setItem('hello-search-engine',this.dataset.engine); renderEngines();
+            }));
+        }
+        function applyLangUI(){
+            document.querySelectorAll('.segment-option').forEach(b=>b.classList.toggle('active',b.dataset.lang===getLang()));
+            renderEngines();
+        }
+        themeToggle?.addEventListener('click',()=>{
+            const n=(getTheme()==='dark'?'light':'dark'); localStorage.setItem('hello-theme',n); applyTheme();
+        });
+        dynamicBgToggle?.addEventListener('click',()=>{
+            const cur=getDynamicBg(); localStorage.setItem('hello-dynamic-bg',!cur); applyDynamicBg();
+        });
+        document.getElementById('languageSelector')?.addEventListener('click',e=>{
+            if(e.target.classList.contains('segment-option')){
+                const l=e.target.dataset.lang; localStorage.setItem('hello-lang',l);
+                if(l==='zh'&&!china.includes(getEngine())) localStorage.setItem('hello-search-engine','baidu');
+                else if(l!=='zh'&&china.includes(getEngine())) localStorage.setItem('hello-search-engine','google');
+                applyLangUI();
+            }
+        });
+        const burger=document.getElementById('burgerBtn'), overlay=document.getElementById('overlay'), menu=document.getElementById('mobileMenu');
+        function open(){burger.classList.add('open');overlay.classList.add('active');menu.classList.add('active');}
+        function close(){burger.classList.remove('open');overlay.classList.remove('active');menu.classList.remove('active');}
+        burger?.addEventListener('click',()=>menu.classList.contains('active')?close():open());
+        overlay?.addEventListener('click',close);
+        menu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+        applyTheme(); applyDynamicBg(); applyLangUI();
+    })();
 </script>
 </body>
 </html>
