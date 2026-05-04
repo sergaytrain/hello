@@ -24,6 +24,7 @@
       --border-radius-card: 20px;
       --border-radius-element: 12px;
       --nav-height: 56px;
+      --menu-bg: rgba(255,255,255,0.9);
     }
 
     body.dark {
@@ -34,6 +35,7 @@
       --accent: #0a84ff;
       --separator: rgba(84, 84, 88, 0.5);
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+      --menu-bg: rgba(28,28,30,0.95);
     }
 
     body {
@@ -51,7 +53,6 @@
       padding: 20px;
     }
 
-    /* Общий контейнер для всех экранов */
     .app-container {
       width: 100%;
       max-width: 560px;
@@ -65,14 +66,8 @@
     }
 
     @keyframes fadeSlideIn {
-      0% {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     /* Навигация */
@@ -84,9 +79,9 @@
       padding: 8px 0;
       margin-bottom: 12px;
       background: transparent;
-      backdrop-filter: none;
-      border-radius: 0;
       flex-shrink: 0;
+      position: relative;
+      z-index: 20;
     }
 
     .logo-link {
@@ -99,10 +94,9 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      z-index: 25;
     }
-    .logo-link:hover {
-      opacity: 0.8;
-    }
+    .logo-link:hover { opacity: 0.8; }
 
     .nav-links {
       display: flex;
@@ -118,13 +112,88 @@
       border-radius: 8px;
       background: transparent;
       transition: background 0.2s, color 0.2s;
-      letter-spacing: -0.01em;
     }
-    .nav-links a:hover {
-      background: rgba(0, 122, 255, 0.12);
+    .nav-links a:hover { background: rgba(0, 122, 255, 0.12); }
+
+    /* Бургер */
+    .burger-btn {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 30;
+      gap: 5px;
+      padding: 8px;
+      position: relative;
+    }
+    .burger-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 8px;
+      transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+      transform-origin: center;
+    }
+    .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Выдвижное меню */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s;
+      z-index: 18;
+    }
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
     }
 
-    /* Основной контент */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100%;
+      background: var(--menu-bg);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      box-shadow: -8px 0 30px rgba(0,0,0,0.12);
+      z-index: 22;
+      display: flex;
+      flex-direction: column;
+      padding: 32px 24px;
+      transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+      gap: 12px;
+    }
+    .mobile-menu.active { right: 0; }
+    .mobile-menu a {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--separator);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* Главная */
     .main-content {
       flex: 1;
       display: flex;
@@ -135,22 +204,16 @@
       gap: 28px;
       margin-top: -20px;
     }
-
-    /* Главная: большой логотип */
     .big-logo {
       font-size: 4.2rem;
       font-weight: 580;
       letter-spacing: -0.04em;
-      color: var(--text-primary);
-      text-shadow: 0 4px 12px rgba(0,0,0,0.05);
       animation: logoReveal 0.7s ease-out;
     }
     @keyframes logoReveal {
       0% { transform: scale(0.9); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
-
-    /* Поисковая строка */
     .search-wrapper {
       width: 100%;
       background: var(--bg-card);
@@ -166,13 +229,7 @@
       transform: scale(1.02);
       box-shadow: 0 12px 36px rgba(0,0,0,0.12);
       border-color: rgba(0,122,255,0.3);
-      background: rgba(255,255,255,0.85);
     }
-    body.dark .search-wrapper:focus-within {
-      background: rgba(44,44,46,0.92);
-      border-color: rgba(10,132,255,0.5);
-    }
-
     .search-input {
       width: 100%;
       border: none;
@@ -180,34 +237,20 @@
       font-size: 1.1rem;
       color: var(--text-primary);
       outline: none;
-      letter-spacing: -0.01em;
     }
-    .search-input::placeholder {
-      color: var(--text-secondary);
-      font-weight: 400;
-    }
+    .search-input::placeholder { color: var(--text-secondary); }
 
-    /* Футер */
     .footer {
       flex-shrink: 0;
       text-align: center;
       padding: 18px 0 6px;
       font-size: 0.85rem;
       color: var(--text-secondary);
-      font-weight: 450;
       width: 100%;
     }
-    .footer a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--text-secondary);
-      transition: color 0.2s;
-    }
-    .footer a:hover {
-      color: var(--accent);
-    }
+    .footer a { color: var(--text-secondary); text-decoration: none; }
 
-    /* ----- СТИЛИ ДЛЯ НАСТРОЕК (и карточек) ----- */
+    /* Настройки */
     .settings-list {
       width: 100%;
       background: var(--bg-card);
@@ -220,176 +263,86 @@
       overflow: hidden;
       margin-top: 8px;
     }
-
     .settings-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 16px 18px;
       border-bottom: 1px solid var(--separator);
-      transition: background 0.2s;
-      cursor: default;
     }
-    .settings-item:last-child {
-      border-bottom: none;
-    }
-    .settings-item.clickable {
-      cursor: pointer;
-    }
-    .settings-item.clickable:hover {
-      background: rgba(0, 122, 255, 0.06);
-    }
+    .settings-item:last-child { border-bottom: none; }
+    .settings-item.clickable { cursor: pointer; }
+    .settings-item.clickable:hover { background: rgba(0,122,255,0.06); }
+    .settings-value { color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+    .chevron { opacity: 0.7; }
 
-    .settings-label {
-      font-size: 1rem;
-      font-weight: 450;
-      letter-spacing: -0.01em;
-    }
-    .settings-value {
-      color: var(--text-secondary);
-      font-weight: 450;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .chevron {
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      margin-left: 4px;
-      opacity: 0.7;
-    }
-
-    /* iOS toggle */
     .ios-toggle {
-      position: relative;
-      width: 51px;
-      height: 31px;
-      background: #e9e9ea;
-      border-radius: 31px;
-      transition: background 0.3s;
-      cursor: pointer;
-      flex-shrink: 0;
+      width: 51px; height: 31px; background: #e9e9ea; border-radius: 31px;
+      position: relative; cursor: pointer; transition: background 0.3s; flex-shrink: 0;
     }
-    .ios-toggle.active {
-      background: #34c759;
-    }
+    .ios-toggle.active { background: #34c759; }
     .ios-toggle::after {
-      content: "";
-      position: absolute;
-      width: 27px;
-      height: 27px;
-      background: white;
-      border-radius: 50%;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      content: ""; position: absolute; width: 27px; height: 27px;
+      background: white; border-radius: 50%; top: 2px; left: 2px;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .ios-toggle.active::after {
-      transform: translateX(20px);
-    }
+    .ios-toggle.active::after { transform: translateX(20px); }
 
-    /* Сегментированный контрол (язык) */
     .segment-control {
-      display: flex;
-      background: rgba(120, 120, 128, 0.16);
-      border-radius: 8px;
-      padding: 2px;
-      width: fit-content;
-      margin: 6px 0;
-      backdrop-filter: blur(10px);
+      display: flex; background: rgba(120,120,128,0.16); border-radius: 8px;
+      padding: 2px; width: fit-content;
     }
     .segment-option {
-      padding: 6px 14px;
-      border-radius: 7px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.25s;
-      background: transparent;
-      border: none;
-      outline: none;
+      padding: 6px 14px; border-radius: 7px; font-size: 0.9rem; font-weight: 500;
+      background: transparent; border: none; color: var(--text-primary); cursor: pointer;
     }
     .segment-option.active {
-      background: var(--bg-card);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      font-weight: 590;
-      backdrop-filter: blur(20px);
+      background: var(--bg-card); box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-
-    /* Радио кнопки стилизованные */
-    .radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      width: 100%;
-    }
+    .radio-group { display: flex; flex-direction: column; gap: 2px; width: 100%; }
     .radio-option {
-      display: flex;
-      align-items: center;
-      padding: 8px 0;
-      cursor: pointer;
-      font-size: 0.95rem;
+      display: flex; align-items: center; padding: 8px 0; cursor: pointer;
     }
     .radio-circle {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--text-secondary);
-      margin-right: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.2s;
+      width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-secondary);
+      margin-right: 12px; display: flex; align-items: center; justify-content: center;
     }
-    .radio-circle.selected {
-      border-color: var(--accent);
-    }
+    .radio-circle.selected { border-color: var(--accent); }
     .radio-circle.selected::after {
-      content: "";
-      width: 12px;
-      height: 12px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pop 0.2s ease;
+      content: ""; width: 12px; height: 12px; background: var(--accent);
+      border-radius: 50%; animation: pop 0.2s ease;
     }
-    @keyframes pop {
-      0% { transform: scale(0); }
-      80% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
+    @keyframes pop { 0%{transform:scale(0);} 80%{transform:scale(1.2);} 100%{transform:scale(1);} }
 
-    .page-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-      align-self: flex-start;
-    }
-
+    .page-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 12px; align-self: flex-start; }
     .about-card {
-      text-align: center;
-      width: 100%;
-      background: var(--bg-card);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-radius: var(--border-radius-card);
-      padding: 36px 24px;
-      box-shadow: var(--shadow);
+      background: var(--bg-card); backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur); border-radius: var(--border-radius-card);
+      padding: 40px 28px; box-shadow: var(--shadow); text-align: center; margin: auto 0;
+    }
+
+    /* Адаптив */
+    @media (max-width: 600px) {
+      body { padding: 16px; }
+      .nav-links { display: none; }
+      .burger-btn { display: flex; }
+      .big-logo { font-size: 3.2rem; }
+      .app-container { max-height: 100%; }
     }
   </style>
 </head>
 <body class="light">
   <div class="app-container">
     <div class="navbar">
-      <a href="index.html" class="logo-link">
-        <span style="font-size:1.5rem;">👋</span> Hello!
-      </a>
+      <a href="index.html" class="logo-link">👋 Hello!</a>
       <div class="nav-links">
         <a href="settings/">Настройки</a>
         <a href="about/">О проекте</a>
       </div>
+      <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
     </div>
 
     <div class="main-content">
@@ -404,19 +357,19 @@
     </div>
   </div>
 
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="settings/">Настройки</a>
+    <a href="about/">О проекте</a>
+  </div>
+
   <script>
     (function() {
-      // Применение темы при загрузке
+      const body = document.body;
       const savedTheme = localStorage.getItem('hello-theme');
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark');
-        document.body.classList.remove('light');
-      } else {
-        document.body.classList.add('light');
-        document.body.classList.remove('dark');
-      }
+      if (savedTheme === 'dark') body.classList.add('dark');
+      else body.classList.remove('dark');
 
-      // Обработка Enter в поиске (для демонстрации, будет использовать систему по умолчанию позже)
       const searchInput = document.getElementById('searchInput');
       if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -434,12 +387,30 @@
                 '360search': 'https://www.so.com/s?q=',
                 shenma: 'https://m.sm.cn/s?q='
               };
-              const url = (urls[engine] || urls.google) + encodeURIComponent(query);
-              window.location.href = url;
+              window.location.href = (urls[engine] || urls.google) + encodeURIComponent(query);
             }
           }
         });
       }
+
+      const burger = document.getElementById('burgerBtn');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const menu = document.getElementById('mobileMenu');
+      function openMenu() {
+        burger.classList.add('open');
+        overlay.classList.add('active');
+        menu.classList.add('active');
+      }
+      function closeMenu() {
+        burger.classList.remove('open');
+        overlay.classList.remove('active');
+        menu.classList.remove('active');
+      }
+      burger?.addEventListener('click', () => {
+        if (menu.classList.contains('active')) closeMenu(); else openMenu();
+      });
+      overlay?.addEventListener('click', closeMenu);
+      menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
     })();
   </script>
 </body>
