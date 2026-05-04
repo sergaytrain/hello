@@ -13,44 +13,58 @@
 
     :root {
       --bg-primary: #f2f2f7;
-      --bg-card: rgba(255, 255, 255, 0.72);
+      --bg-card: rgba(255, 255, 255, 0.6);
       --text-primary: #1c1c1e;
       --text-secondary: #6e6e73;
       --accent: #007aff;
       --separator: rgba(60, 60, 67, 0.12);
-      --shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
-      --blur: saturate(180%) blur(30px);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
+      --blur-strong: saturate(220%) blur(40px);
       --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      --border-radius-card: 20px;
-      --border-radius-element: 12px;
-      --nav-height: 56px;
+      --border-radius-card: 24px;
       --menu-bg: rgba(255,255,255,0.9);
     }
 
     body.dark {
       --bg-primary: #000000;
-      --bg-card: rgba(28, 28, 30, 0.82);
+      --bg-card: rgba(28, 28, 30, 0.65);
       --text-primary: #ffffff;
       --text-secondary: #aeaeb2;
       --accent: #0a84ff;
       --separator: rgba(84, 84, 88, 0.5);
-      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
-      --menu-bg: rgba(28,28,30,0.95);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.5);
+      --menu-bg: rgba(28,28,30,0.92);
     }
 
     body {
-      font-family: -apple-system, 'Helvetica Neue', 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
+      font-family: -apple-system, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
       height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       transition: background-color var(--transition), color var(--transition);
       overflow: hidden;
       position: relative;
       padding: 20px;
+    }
+
+    /* Динамический фоновый слой */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+    .bg-layer.active {
+      opacity: 1;
     }
 
     .app-container {
@@ -62,6 +76,8 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      z-index: 2;
       animation: fadeSlideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
@@ -70,14 +86,13 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* Навигация */
+    /* Навигация — единая для всех страниц */
     .navbar {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 8px 0;
-      margin-bottom: 12px;
       background: transparent;
       flex-shrink: 0;
       position: relative;
@@ -94,28 +109,40 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      z-index: 25;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
     }
     .logo-link:hover { opacity: 0.8; }
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 12px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.15);
+      padding: 4px;
+      border-radius: 24px;
     }
 
     .nav-links a {
       text-decoration: none;
-      color: var(--accent);
+      color: var(--text-primary);
       font-weight: 500;
-      font-size: 1rem;
-      padding: 6px 12px;
-      border-radius: 8px;
+      font-size: 0.95rem;
+      padding: 8px 16px;
+      border-radius: 20px;
       background: transparent;
       transition: background 0.2s, color 0.2s;
     }
-    .nav-links a:hover { background: rgba(0, 122, 255, 0.12); }
+    .nav-links a:hover {
+      background: rgba(0, 122, 255, 0.15);
+      color: var(--accent);
+    }
 
-    /* Бургер */
+    /* Бургер-меню (планшет/телефон) */
     .burger-btn {
       display: none;
       flex-direction: column;
@@ -129,7 +156,6 @@
       z-index: 30;
       gap: 5px;
       padding: 8px;
-      position: relative;
     }
     .burger-btn span {
       display: block;
@@ -138,19 +164,14 @@
       background: var(--accent);
       border-radius: 8px;
       transition: 0.3s cubic-bezier(0.4,0,0.2,1);
-      transform-origin: center;
     }
     .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Выдвижное меню */
     .mobile-menu-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.3);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
@@ -189,11 +210,9 @@
       text-decoration: none;
       padding: 14px 0;
       border-bottom: 1px solid var(--separator);
-      transition: color 0.2s;
     }
-    .mobile-menu a:hover { color: var(--accent); }
 
-    /* Главная */
+    /* Главный контент */
     .main-content {
       flex: 1;
       display: flex;
@@ -202,34 +221,48 @@
       justify-content: center;
       width: 100%;
       gap: 28px;
-      margin-top: -20px;
     }
+
     .big-logo {
       font-size: 4.2rem;
       font-weight: 580;
       letter-spacing: -0.04em;
+      color: var(--text-primary);
+      text-shadow: 0 4px 12px rgba(0,0,0,0.05);
       animation: logoReveal 0.7s ease-out;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.1);
+      padding: 12px 28px;
+      border-radius: 30px;
     }
     @keyframes logoReveal {
       0% { transform: scale(0.9); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
+
     .search-wrapper {
       width: 100%;
       background: var(--bg-card);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-radius: var(--border-radius-element);
-      box-shadow: var(--shadow);
-      padding: 14px 18px;
+      backdrop-filter: var(--blur-strong);
+      -webkit-backdrop-filter: var(--blur-strong);
+      border-radius: var(--border-radius-card);
+      box-shadow: var(--shadow-md);
+      padding: 16px 20px;
       transition: all var(--transition);
-      border: 1px solid transparent;
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .search-wrapper:focus-within {
       transform: scale(1.02);
-      box-shadow: 0 12px 36px rgba(0,0,0,0.12);
-      border-color: rgba(0,122,255,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      border-color: rgba(0,122,255,0.4);
+      background: rgba(255,255,255,0.75);
     }
+    body.dark .search-wrapper:focus-within {
+      background: rgba(44,44,46,0.85);
+      border-color: rgba(10,132,255,0.5);
+    }
+
     .search-input {
       width: 100%;
       border: none;
@@ -238,101 +271,39 @@
       color: var(--text-primary);
       outline: none;
     }
-    .search-input::placeholder { color: var(--text-secondary); }
+    .search-input::placeholder {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
 
     .footer {
       flex-shrink: 0;
       text-align: center;
-      padding: 18px 0 6px;
+      padding: 16px 0 8px;
       font-size: 0.85rem;
       color: var(--text-secondary);
       width: 100%;
     }
-    .footer a { color: var(--text-secondary); text-decoration: none; }
-
-    /* Настройки */
-    .settings-list {
-      width: 100%;
-      background: var(--bg-card);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-radius: var(--border-radius-card);
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      margin-top: 8px;
-    }
-    .settings-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--separator);
-    }
-    .settings-item:last-child { border-bottom: none; }
-    .settings-item.clickable { cursor: pointer; }
-    .settings-item.clickable:hover { background: rgba(0,122,255,0.06); }
-    .settings-value { color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-    .chevron { opacity: 0.7; }
-
-    .ios-toggle {
-      width: 51px; height: 31px; background: #e9e9ea; border-radius: 31px;
-      position: relative; cursor: pointer; transition: background 0.3s; flex-shrink: 0;
-    }
-    .ios-toggle.active { background: #34c759; }
-    .ios-toggle::after {
-      content: ""; position: absolute; width: 27px; height: 27px;
-      background: white; border-radius: 50%; top: 2px; left: 2px;
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .ios-toggle.active::after { transform: translateX(20px); }
-
-    .segment-control {
-      display: flex; background: rgba(120,120,128,0.16); border-radius: 8px;
-      padding: 2px; width: fit-content;
-    }
-    .segment-option {
-      padding: 6px 14px; border-radius: 7px; font-size: 0.9rem; font-weight: 500;
-      background: transparent; border: none; color: var(--text-primary); cursor: pointer;
-    }
-    .segment-option.active {
-      background: var(--bg-card); box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-    .radio-group { display: flex; flex-direction: column; gap: 2px; width: 100%; }
-    .radio-option {
-      display: flex; align-items: center; padding: 8px 0; cursor: pointer;
-    }
-    .radio-circle {
-      width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-secondary);
-      margin-right: 12px; display: flex; align-items: center; justify-content: center;
-    }
-    .radio-circle.selected { border-color: var(--accent); }
-    .radio-circle.selected::after {
-      content: ""; width: 12px; height: 12px; background: var(--accent);
-      border-radius: 50%; animation: pop 0.2s ease;
-    }
-    @keyframes pop { 0%{transform:scale(0);} 80%{transform:scale(1.2);} 100%{transform:scale(1);} }
-
-    .page-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 12px; align-self: flex-start; }
-    .about-card {
-      background: var(--bg-card); backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur); border-radius: var(--border-radius-card);
-      padding: 40px 28px; box-shadow: var(--shadow); text-align: center; margin: auto 0;
+    .footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--text-secondary);
     }
 
-    /* Адаптив */
+    /* Адаптивный вид */
     @media (max-width: 600px) {
       body { padding: 16px; }
       .nav-links { display: none; }
       .burger-btn { display: flex; }
-      .big-logo { font-size: 3.2rem; }
+      .big-logo { font-size: 2.8rem; padding: 8px 20px; }
       .app-container { max-height: 100%; }
+      .logo-link { background: rgba(255,255,255,0.25); }
     }
   </style>
 </head>
 <body class="light">
+  <div class="bg-layer" id="bgLayer"></div>
+
   <div class="app-container">
     <div class="navbar">
       <a href="index.html" class="logo-link">👋 Hello!</a>
@@ -364,35 +335,78 @@
   </div>
 
   <script>
-    (function() {
+    (() => {
+      // Тема
       const body = document.body;
       const savedTheme = localStorage.getItem('hello-theme');
       if (savedTheme === 'dark') body.classList.add('dark');
       else body.classList.remove('dark');
 
+      // Поиск
       const searchInput = document.getElementById('searchInput');
-      if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            const query = e.target.value.trim();
-            if (query) {
-              const engine = localStorage.getItem('hello-search-engine') || 'google';
-              const urls = {
-                yandex: 'https://yandex.ru/search/?text=',
-                google: 'https://www.google.com/search?q=',
-                brave: 'https://search.brave.com/search?q=',
-                bing: 'https://www.bing.com/search?q=',
-                yahoo: 'https://search.yahoo.com/search?p=',
-                baidu: 'https://www.baidu.com/s?wd=',
-                '360search': 'https://www.so.com/s?q=',
-                shenma: 'https://m.sm.cn/s?q='
-              };
-              window.location.href = (urls[engine] || urls.google) + encodeURIComponent(query);
-            }
+      searchInput?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = e.target.value.trim();
+          if (query) {
+            const engine = localStorage.getItem('hello-search-engine') || 'google';
+            const urls = {
+              yandex: 'https://yandex.ru/search/?text=',
+              google: 'https://www.google.com/search?q=',
+              brave: 'https://search.brave.com/search?q=',
+              bing: 'https://www.bing.com/search?q=',
+              yahoo: 'https://search.yahoo.com/search?p=',
+              baidu: 'https://www.baidu.com/s?wd=',
+              '360search': 'https://www.so.com/s?q=',
+              shenma: 'https://m.sm.cn/s?q='
+            };
+            window.location.href = (urls[engine] || urls.google) + encodeURIComponent(query);
           }
-        });
+        }
+      });
+
+      // Динамический фон
+      const bgLayer = document.getElementById('bgLayer');
+      let bgImages = [];
+      let bgIndex = 0;
+      let bgInterval = null;
+
+      async function initDynamicBackground() {
+        const enabled = localStorage.getItem('hello-dynamic-bg') === 'true';
+        if (!enabled) {
+          if (bgLayer) bgLayer.style.display = 'none';
+          return;
+        }
+        try {
+          const response = await fetch('images-list.json');
+          if (!response.ok) throw new Error('No images list');
+          bgImages = await response.json();
+          if (bgImages.length > 0) {
+            bgLayer.style.display = 'block';
+            // Показываем первое изображение
+            bgLayer.style.backgroundImage = `url(${bgImages[0]})`;
+            bgLayer.classList.add('active');
+            bgIndex = 0;
+            // Запускаем смену
+            if (bgInterval) clearInterval(bgInterval);
+            bgInterval = setInterval(() => {
+              bgIndex = (bgIndex + 1) % bgImages.length;
+              // Плавно меняем фон через подмену класса
+              bgLayer.classList.remove('active');
+              setTimeout(() => {
+                bgLayer.style.backgroundImage = `url(${bgImages[bgIndex]})`;
+                bgLayer.classList.add('active');
+              }, 500); // небольшая задержка для кроссфейда
+            }, 15000); // каждые 15 секунд
+          }
+        } catch (err) {
+          console.log('Динамический фон отключён или файл не найден');
+          if (bgLayer) bgLayer.style.display = 'none';
+        }
       }
 
+      initDynamicBackground();
+
+      // Бургер-меню
       const burger = document.getElementById('burgerBtn');
       const overlay = document.getElementById('mobileMenuOverlay');
       const menu = document.getElementById('mobileMenu');
@@ -407,7 +421,7 @@
         menu.classList.remove('active');
       }
       burger?.addEventListener('click', () => {
-        if (menu.classList.contains('active')) closeMenu(); else openMenu();
+        menu.classList.contains('active') ? closeMenu() : openMenu();
       });
       overlay?.addEventListener('click', closeMenu);
       menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
