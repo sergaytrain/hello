@@ -63,7 +63,6 @@
             transition: opacity 0.8s ease-in-out;
         }
         .bg-layer.active { opacity: 1; }
-
         .app-container {
             width: 100%;
             max-width: 560px;
@@ -81,181 +80,30 @@
             0% { opacity: 0; transform: translateY(16px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        .navbar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 20;
-        }
-        .logo-link {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-size: 1.375rem;
-            font-weight: 650;
-            letter-spacing: -0.02em;
-            transition: opacity 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: var(--nav-bg);
-            padding: 6px 16px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
+        .navbar { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 0; flex-shrink: 0; position: relative; z-index: 20; }
+        .logo-link { text-decoration: none; color: var(--text-primary); font-size: 1.375rem; font-weight: 650; letter-spacing: -0.02em; transition: opacity 0.2s; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: var(--nav-bg); padding: 6px 16px; border-radius: 20px; box-shadow: 0 0 10px var(--accent-glow); }
         .logo-link:hover { opacity: 0.8; }
-        .nav-links {
-            display: flex;
-            gap: 12px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: var(--nav-bg);
-            padding: 4px;
-            border-radius: 24px;
-            box-shadow: 0 0 8px var(--accent-glow);
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: transparent;
-            transition: background 0.2s, color 0.2s;
-        }
-        .nav-links a:hover {
-            background: var(--accent);
-            color: white;
-        }
-        .burger-btn {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 44px;
-            height: 44px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            z-index: 30;
-            gap: 5px;
-            padding: 8px;
-        }
-        .burger-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 8px;
-            transition: 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
+        .nav-links { display: flex; gap: 12px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: var(--nav-bg); padding: 4px; border-radius: 24px; box-shadow: 0 0 8px var(--accent-glow); }
+        .nav-links a { text-decoration: none; color: var(--text-primary); font-weight: 500; font-size: 0.95rem; padding: 8px 16px; border-radius: 20px; background: transparent; transition: background 0.2s, color 0.2s; }
+        .nav-links a:hover { background: var(--accent); color: white; }
+        .burger-btn { display: none; flex-direction: column; justify-content: center; align-items: center; width: 44px; height: 44px; background: transparent; border: none; cursor: pointer; z-index: 30; gap: 5px; padding: 8px; }
+        .burger-btn span { display: block; width: 22px; height: 2px; background: var(--accent); border-radius: 8px; transition: 0.3s cubic-bezier(0.4,0,0.2,1); }
         .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
         .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        .mobile-menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.35s ease, visibility 0.35s;
-            z-index: 18;
-        }
+        .mobile-menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0.35s; z-index: 18; }
         .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100%;
-            background: var(--menu-bg);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            box-shadow: -8px 0 30px rgba(0,0,0,0.12);
-            z-index: 22;
-            display: flex;
-            flex-direction: column;
-            padding: 32px 24px;
-            transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-            gap: 12px;
-        }
+        .mobile-menu { position: fixed; top: 0; right: -100%; width: 280px; height: 100%; background: var(--menu-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); box-shadow: -8px 0 30px rgba(0,0,0,0.12); z-index: 22; display: flex; flex-direction: column; padding: 32px 24px; transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1); gap: 12px; }
         .mobile-menu.active { right: 0; }
-        .mobile-menu a {
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--separator);
-        }
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            gap: 28px;
-        }
-        .big-logo {
-            font-size: 4.2rem;
-            font-weight: 580;
-            letter-spacing: -0.04em;
-            color: var(--text-primary);
-            text-shadow: 0 0 15px var(--accent-glow);
-            animation: logoReveal 0.7s ease-out;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        @keyframes logoReveal {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .search-wrapper {
-            width: 100%;
-            background: var(--bg-card);
-            backdrop-filter: var(--blur-strong);
-            -webkit-backdrop-filter: var(--blur-strong);
-            border-radius: var(--border-radius-card);
-            box-shadow: var(--shadow-md), 0 0 20px var(--accent-glow);
-            padding: 16px 20px;
-            transition: all var(--transition);
-            border: 1px solid rgba(108, 92, 231, 0.2);
-        }
-        .search-wrapper:focus-within {
-            transform: scale(1.02);
-            box-shadow: 0 12px 40px rgba(108, 92, 231, 0.3);
-            border-color: var(--accent);
-        }
-        .search-input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            outline: none;
-        }
+        .mobile-menu a { font-size: 1.3rem; font-weight: 500; color: var(--text-primary); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--separator); }
+        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 28px; }
+        .big-logo { font-size: 4.2rem; font-weight: 580; letter-spacing: -0.04em; color: var(--text-primary); text-shadow: 0 0 15px var(--accent-glow); animation: logoReveal 0.7s ease-out; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        @keyframes logoReveal { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .search-wrapper { width: 100%; background: var(--bg-card); backdrop-filter: var(--blur-strong); -webkit-backdrop-filter: var(--blur-strong); border-radius: var(--border-radius-card); box-shadow: var(--shadow-md), 0 0 20px var(--accent-glow); padding: 16px 20px; transition: all var(--transition); border: 1px solid rgba(108, 92, 231, 0.2); }
+        .search-wrapper:focus-within { transform: scale(1.02); box-shadow: 0 12px 40px rgba(108, 92, 231, 0.3); border-color: var(--accent); }
+        .search-input { width: 100%; border: none; background: transparent; font-size: 1.1rem; color: var(--text-primary); outline: none; }
         .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
-        .footer {
-            flex-shrink: 0;
-            text-align: center;
-            padding: 16px 0 8px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            width: 100%;
-        }
+        .footer { flex-shrink: 0; text-align: center; padding: 16px 0 8px; font-size: 0.85rem; color: var(--text-secondary); width: 100%; }
         .footer a { color: var(--accent); text-decoration: none; }
         @media (max-width: 600px) {
             body { padding: 16px; }
@@ -326,7 +174,7 @@
             }
         });
 
-        // Динамический фон с проверкой существования файлов
+        // Динамический фон – теперь с проверкой через fetch HEAD (без ошибок в консоли)
         const bgLayer = document.getElementById('bgLayer');
         let validUrls = [];
         let currentIndex = 0;
@@ -344,20 +192,14 @@
                 const filenames = await response.json();
                 if (!Array.isArray(filenames) || filenames.length === 0) throw new Error('Empty list');
 
-                // Проверяем каждое имя файла, существует ли оно в папке images/
                 validUrls = [];
                 for (const name of filenames) {
                     const url = 'images/' + name;
                     try {
-                        await new Promise((resolve, reject) => {
-                            const img = new Image();
-                            img.onload = resolve;
-                            img.onerror = reject;
-                            img.src = url;
-                        });
-                        validUrls.push(url);
+                        const head = await fetch(url, { method: 'HEAD' });
+                        if (head.ok) validUrls.push(url);
                     } catch (e) {
-                        // Этот файл не загрузился, пропускаем
+                        // файл недоступен – пропускаем
                     }
                 }
 
@@ -366,7 +208,6 @@
                     return;
                 }
 
-                // Показываем первый доступный фон
                 bgLayer.style.display = 'block';
                 function showImage(index) {
                     bgLayer.style.backgroundImage = `url(${validUrls[index]})`;
@@ -375,7 +216,6 @@
                 showImage(0);
                 currentIndex = 0;
 
-                // Запускаем смену фонов
                 if (bgInterval) clearInterval(bgInterval);
                 bgInterval = setInterval(() => {
                     currentIndex = (currentIndex + 1) % validUrls.length;
@@ -386,7 +226,6 @@
                 }, 15000);
 
             } catch (err) {
-                // Если что-то пошло не так (файл не найден, JSON битый) – скрываем фон
                 if (bgLayer) bgLayer.style.display = 'none';
             }
         }
