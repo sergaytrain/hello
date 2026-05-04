@@ -1,431 +1,422 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Hello! — Новая вкладка</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Hello! — Новая вкладка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    :root {
-      --bg-primary: #f2f2f7;
-      --bg-card: rgba(255, 255, 255, 0.6);
-      --text-primary: #1c1c1e;
-      --text-secondary: #6e6e73;
-      --accent: #007aff;
-      --separator: rgba(60, 60, 67, 0.12);
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-      --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
-      --blur-strong: saturate(220%) blur(40px);
-      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      --border-radius-card: 24px;
-      --menu-bg: rgba(255,255,255,0.9);
-    }
+        :root {
+            --bg-primary: #f2f2f7;
+            --bg-card: rgba(255, 255, 255, 0.6);
+            --text-primary: #1c1c1e;
+            --text-secondary: #6e6e73;
+            --accent: #6C5CE7;
+            --accent-glow: rgba(108, 92, 231, 0.3);
+            --gradient-start: #6C5CE7;
+            --gradient-end: #0088ff;
+            --separator: rgba(60, 60, 67, 0.12);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
+            --blur-strong: saturate(220%) blur(40px);
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius-card: 24px;
+            --menu-bg: rgba(255,255,255,0.9);
+            --nav-bg: rgba(255,255,255,0.2);
+        }
 
-    body.dark {
-      --bg-primary: #000000;
-      --bg-card: rgba(28, 28, 30, 0.65);
-      --text-primary: #ffffff;
-      --text-secondary: #aeaeb2;
-      --accent: #0a84ff;
-      --separator: rgba(84, 84, 88, 0.5);
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-      --shadow-md: 0 8px 32px rgba(0,0,0,0.5);
-      --menu-bg: rgba(28,28,30,0.92);
-    }
+        body.dark {
+            --bg-primary: #000000;
+            --bg-card: rgba(28, 28, 30, 0.65);
+            --text-primary: #ffffff;
+            --text-secondary: #aeaeb2;
+            --accent: #8B7CF7;
+            --accent-glow: rgba(139, 124, 247, 0.35);
+            --gradient-start: #6C5CE7;
+            --gradient-end: #00a6ff;
+            --separator: rgba(84, 84, 88, 0.5);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.5);
+            --menu-bg: rgba(28,28,30,0.92);
+            --nav-bg: rgba(28,28,30,0.3);
+        }
 
-    body {
-      font-family: -apple-system, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color var(--transition), color var(--transition);
-      overflow: hidden;
-      position: relative;
-      padding: 20px;
-    }
+        body {
+            font-family: -apple-system, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color var(--transition), color var(--transition);
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
 
-    /* Динамический фоновый слой */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: 0;
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-    }
-    .bg-layer.active {
-      opacity: 1;
-    }
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .bg-layer.active {
+            opacity: 1;
+        }
 
-    .app-container {
-      width: 100%;
-      max-width: 560px;
-      height: 100%;
-      max-height: 750px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-      animation: fadeSlideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    }
+        .app-container {
+            width: 100%;
+            max-width: 560px;
+            height: 100%;
+            max-height: 750px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            animation: fadeSlideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
 
-    @keyframes fadeSlideIn {
-      0% { opacity: 0; transform: translateY(16px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
+        @keyframes fadeSlideIn {
+            0% { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
-    /* Навигация — единая для всех страниц */
-    .navbar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      background: transparent;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 20;
-    }
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 20;
+        }
 
-    .logo-link {
-      text-decoration: none;
-      color: var(--text-primary);
-      font-size: 1.375rem;
-      font-weight: 650;
-      letter-spacing: -0.02em;
-      transition: opacity 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(255,255,255,0.2);
-      padding: 6px 16px;
-      border-radius: 20px;
-    }
-    .logo-link:hover { opacity: 0.8; }
+        .logo-link {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.375rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: var(--nav-bg);
+            padding: 6px 16px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .logo-link:hover { opacity: 0.8; }
 
-    .nav-links {
-      display: flex;
-      gap: 12px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(255,255,255,0.15);
-      padding: 4px;
-      border-radius: 24px;
-    }
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: var(--nav-bg);
+            padding: 4px;
+            border-radius: 24px;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
 
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-primary);
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: transparent;
-      transition: background 0.2s, color 0.2s;
-    }
-    .nav-links a:hover {
-      background: rgba(0, 122, 255, 0.15);
-      color: var(--accent);
-    }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: transparent;
+            transition: background 0.2s, color 0.2s;
+        }
+        .nav-links a:hover {
+            background: var(--accent);
+            color: white;
+        }
 
-    /* Бургер-меню (планшет/телефон) */
-    .burger-btn {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 44px;
-      height: 44px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      z-index: 30;
-      gap: 5px;
-      padding: 8px;
-    }
-    .burger-btn span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--accent);
-      border-radius: 8px;
-      transition: 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .burger-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 30;
+            gap: 5px;
+            padding: 8px;
+        }
+        .burger-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 8px;
+            transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    .mobile-menu-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.35s ease, visibility 0.35s;
-      z-index: 18;
-    }
-    .mobile-menu-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s;
+            z-index: 18;
+        }
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px;
-      height: 100%;
-      background: var(--menu-bg);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      box-shadow: -8px 0 30px rgba(0,0,0,0.12);
-      z-index: 22;
-      display: flex;
-      flex-direction: column;
-      padding: 32px 24px;
-      transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-      gap: 12px;
-    }
-    .mobile-menu.active { right: 0; }
-    .mobile-menu a {
-      font-size: 1.3rem;
-      font-weight: 500;
-      color: var(--text-primary);
-      text-decoration: none;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--separator);
-    }
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100%;
+            background: var(--menu-bg);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            box-shadow: -8px 0 30px rgba(0,0,0,0.12);
+            z-index: 22;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px;
+            transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            gap: 12px;
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu a {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--separator);
+        }
 
-    /* Главный контент */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      gap: 28px;
-    }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 28px;
+        }
 
-    .big-logo {
-      font-size: 4.2rem;
-      font-weight: 580;
-      letter-spacing: -0.04em;
-      color: var(--text-primary);
-      text-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      animation: logoReveal 0.7s ease-out;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      background: rgba(255,255,255,0.1);
-      padding: 12px 28px;
-      border-radius: 30px;
-    }
-    @keyframes logoReveal {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+        .big-logo {
+            font-size: 4.2rem;
+            font-weight: 580;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+            text-shadow: 0 0 15px var(--accent-glow);
+            animation: logoReveal 0.7s ease-out;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        @keyframes logoReveal {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-    .search-wrapper {
-      width: 100%;
-      background: var(--bg-card);
-      backdrop-filter: var(--blur-strong);
-      -webkit-backdrop-filter: var(--blur-strong);
-      border-radius: var(--border-radius-card);
-      box-shadow: var(--shadow-md);
-      padding: 16px 20px;
-      transition: all var(--transition);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .search-wrapper:focus-within {
-      transform: scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-      border-color: rgba(0,122,255,0.4);
-      background: rgba(255,255,255,0.75);
-    }
-    body.dark .search-wrapper:focus-within {
-      background: rgba(44,44,46,0.85);
-      border-color: rgba(10,132,255,0.5);
-    }
+        .search-wrapper {
+            width: 100%;
+            background: var(--bg-card);
+            backdrop-filter: var(--blur-strong);
+            -webkit-backdrop-filter: var(--blur-strong);
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-md), 0 0 20px var(--accent-glow);
+            padding: 16px 20px;
+            transition: all var(--transition);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+        }
+        .search-wrapper:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(108, 92, 231, 0.3);
+            border-color: var(--accent);
+        }
 
-    .search-input {
-      width: 100%;
-      border: none;
-      background: transparent;
-      font-size: 1.1rem;
-      color: var(--text-primary);
-      outline: none;
-    }
-    .search-input::placeholder {
-      color: var(--text-secondary);
-      font-weight: 400;
-    }
+        .search-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            outline: none;
+        }
+        .search-input::placeholder {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
 
-    .footer {
-      flex-shrink: 0;
-      text-align: center;
-      padding: 16px 0 8px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      width: 100%;
-    }
-    .footer a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--text-secondary);
-    }
+        .footer {
+            flex-shrink: 0;
+            text-align: center;
+            padding: 16px 0 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            width: 100%;
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
 
-    /* Адаптивный вид */
-    @media (max-width: 600px) {
-      body { padding: 16px; }
-      .nav-links { display: none; }
-      .burger-btn { display: flex; }
-      .big-logo { font-size: 2.8rem; padding: 8px 20px; }
-      .app-container { max-height: 100%; }
-      .logo-link { background: rgba(255,255,255,0.25); }
-    }
-  </style>
+        @media (max-width: 600px) {
+            body { padding: 16px; }
+            .nav-links { display: none; }
+            .burger-btn { display: flex; }
+            .big-logo { font-size: 2.8rem; }
+            .app-container { max-height: 100%; }
+        }
+    </style>
 </head>
 <body class="light">
-  <div class="bg-layer" id="bgLayer"></div>
+<div class="bg-layer" id="bgLayer"></div>
 
-  <div class="app-container">
+<div class="app-container">
     <div class="navbar">
-      <a href="index.html" class="logo-link">👋 Hello!</a>
-      <div class="nav-links">
-        <a href="settings/">Настройки</a>
-        <a href="about/">О проекте</a>
-      </div>
-      <button class="burger-btn" id="burgerBtn" aria-label="Меню">
-        <span></span><span></span><span></span>
-      </button>
+        <a href="index.html" class="logo-link">👋 Hello!</a>
+        <div class="nav-links">
+            <a href="news/">Новости</a>
+            <a href="settings/">Настройки</a>
+            <a href="about/">О проекте</a>
+        </div>
+        <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 
     <div class="main-content">
-      <div class="big-logo">Hello!</div>
-      <div class="search-wrapper">
-        <input type="text" class="search-input" placeholder="Введите ваш запрос." id="searchInput">
-      </div>
+        <div class="big-logo">Hello!</div>
+        <div class="search-wrapper">
+            <input type="text" class="search-input" placeholder="Введите ваш запрос." id="searchInput">
+        </div>
     </div>
 
     <div class="footer">
-      <p>2026, <a href="about/">«hello!»</a>.</p>
+        <p>2026, <a href="about/">«hello!»</a>.</p>
     </div>
-  </div>
+</div>
 
-  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-  <div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+    <a href="news/">Новости</a>
     <a href="settings/">Настройки</a>
     <a href="about/">О проекте</a>
-  </div>
+</div>
 
-  <script>
+<script>
     (() => {
-      // Тема
-      const body = document.body;
-      const savedTheme = localStorage.getItem('hello-theme');
-      if (savedTheme === 'dark') body.classList.add('dark');
-      else body.classList.remove('dark');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('hello-theme');
+        if (savedTheme === 'dark') body.classList.add('dark');
+        else body.classList.remove('dark');
 
-      // Поиск
-      const searchInput = document.getElementById('searchInput');
-      searchInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          const query = e.target.value.trim();
-          if (query) {
-            const engine = localStorage.getItem('hello-search-engine') || 'google';
-            const urls = {
-              yandex: 'https://yandex.ru/search/?text=',
-              google: 'https://www.google.com/search?q=',
-              brave: 'https://search.brave.com/search?q=',
-              bing: 'https://www.bing.com/search?q=',
-              yahoo: 'https://search.yahoo.com/search?p=',
-              baidu: 'https://www.baidu.com/s?wd=',
-              '360search': 'https://www.so.com/s?q=',
-              shenma: 'https://m.sm.cn/s?q='
-            };
-            window.location.href = (urls[engine] || urls.google) + encodeURIComponent(query);
-          }
+        const searchInput = document.getElementById('searchInput');
+        searchInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = e.target.value.trim();
+                if (query) {
+                    const engine = localStorage.getItem('hello-search-engine') || 'google';
+                    const urls = {
+                        yandex: 'https://yandex.ru/search/?text=',
+                        google: 'https://www.google.com/search?q=',
+                        brave: 'https://search.brave.com/search?q=',
+                        bing: 'https://www.bing.com/search?q=',
+                        yahoo: 'https://search.yahoo.com/search?p=',
+                        baidu: 'https://www.baidu.com/s?wd=',
+                        '360search': 'https://www.so.com/s?q=',
+                        shenma: 'https://m.sm.cn/s?q='
+                    };
+                    window.location.href = (urls[engine] || urls.google) + encodeURIComponent(query);
+                }
+            }
+        });
+
+        const bgLayer = document.getElementById('bgLayer');
+        let bgImages = [];
+        let bgIndex = 0;
+        let bgInterval = null;
+
+        async function initDynamicBackground() {
+            const enabled = localStorage.getItem('hello-dynamic-bg') === 'true';
+            if (!enabled) {
+                if (bgLayer) bgLayer.style.display = 'none';
+                return;
+            }
+            try {
+                const response = await fetch('images-list.json');
+                if (!response.ok) throw new Error('No images list');
+                bgImages = await response.json();
+                if (bgImages.length > 0) {
+                    bgLayer.style.display = 'block';
+                    bgLayer.style.backgroundImage = `url(${bgImages[0]})`;
+                    bgLayer.classList.add('active');
+                    bgIndex = 0;
+                    if (bgInterval) clearInterval(bgInterval);
+                    bgInterval = setInterval(() => {
+                        bgIndex = (bgIndex + 1) % bgImages.length;
+                        bgLayer.classList.remove('active');
+                        setTimeout(() => {
+                            bgLayer.style.backgroundImage = `url(${bgImages[bgIndex]})`;
+                            bgLayer.classList.add('active');
+                        }, 500);
+                    }, 15000);
+                }
+            } catch (err) {
+                if (bgLayer) bgLayer.style.display = 'none';
+            }
         }
-      });
+        initDynamicBackground();
 
-      // Динамический фон
-      const bgLayer = document.getElementById('bgLayer');
-      let bgImages = [];
-      let bgIndex = 0;
-      let bgInterval = null;
-
-      async function initDynamicBackground() {
-        const enabled = localStorage.getItem('hello-dynamic-bg') === 'true';
-        if (!enabled) {
-          if (bgLayer) bgLayer.style.display = 'none';
-          return;
+        const burger = document.getElementById('burgerBtn');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        const menu = document.getElementById('mobileMenu');
+        function openMenu() {
+            burger.classList.add('open');
+            overlay.classList.add('active');
+            menu.classList.add('active');
         }
-        try {
-          const response = await fetch('images-list.json');
-          if (!response.ok) throw new Error('No images list');
-          bgImages = await response.json();
-          if (bgImages.length > 0) {
-            bgLayer.style.display = 'block';
-            // Показываем первое изображение
-            bgLayer.style.backgroundImage = `url(${bgImages[0]})`;
-            bgLayer.classList.add('active');
-            bgIndex = 0;
-            // Запускаем смену
-            if (bgInterval) clearInterval(bgInterval);
-            bgInterval = setInterval(() => {
-              bgIndex = (bgIndex + 1) % bgImages.length;
-              // Плавно меняем фон через подмену класса
-              bgLayer.classList.remove('active');
-              setTimeout(() => {
-                bgLayer.style.backgroundImage = `url(${bgImages[bgIndex]})`;
-                bgLayer.classList.add('active');
-              }, 500); // небольшая задержка для кроссфейда
-            }, 15000); // каждые 15 секунд
-          }
-        } catch (err) {
-          console.log('Динамический фон отключён или файл не найден');
-          if (bgLayer) bgLayer.style.display = 'none';
+        function closeMenu() {
+            burger.classList.remove('open');
+            overlay.classList.remove('active');
+            menu.classList.remove('active');
         }
-      }
-
-      initDynamicBackground();
-
-      // Бургер-меню
-      const burger = document.getElementById('burgerBtn');
-      const overlay = document.getElementById('mobileMenuOverlay');
-      const menu = document.getElementById('mobileMenu');
-      function openMenu() {
-        burger.classList.add('open');
-        overlay.classList.add('active');
-        menu.classList.add('active');
-      }
-      function closeMenu() {
-        burger.classList.remove('open');
-        overlay.classList.remove('active');
-        menu.classList.remove('active');
-      }
-      burger?.addEventListener('click', () => {
-        menu.classList.contains('active') ? closeMenu() : openMenu();
-      });
-      overlay?.addEventListener('click', closeMenu);
-      menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+        burger?.addEventListener('click', () => {
+            menu.classList.contains('active') ? closeMenu() : openMenu();
+        });
+        overlay?.addEventListener('click', closeMenu);
+        menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
     })();
-  </script>
+</script>
 </body>
 </html>
