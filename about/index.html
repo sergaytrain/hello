@@ -7,15 +7,15 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     :root {
-      --bg-primary:#f2f2f7; --bg-card:rgba(255,255,255,0.72); --text-primary:#1c1c1e;
+      --bg-primary:#f2f2f7; --bg-card:rgba(255,255,255,0.6); --text-primary:#1c1c1e;
       --text-secondary:#6e6e73; --accent:#007aff; --separator:rgba(60,60,67,0.12);
-      --shadow:0 8px 32px rgba(0,0,0,0.04); --blur:saturate(180%) blur(30px);
-      --transition:0.35s;
+      --shadow:0 8px 32px rgba(0,0,0,0.06); --blur:saturate(220%) blur(40px);
+      --transition:0.35s; --menu-bg:rgba(255,255,255,0.9);
     }
     body.dark {
-      --bg-primary:#000; --bg-card:rgba(28,28,30,0.82); --text-primary:#fff;
+      --bg-primary:#000; --bg-card:rgba(28,28,30,0.65); --text-primary:#fff;
       --text-secondary:#aeaeb2; --accent:#0a84ff; --separator:rgba(84,84,88,0.5);
-      --shadow:0 8px 32px rgba(0,0,0,0.4);
+      --shadow:0 8px 32px rgba(0,0,0,0.5); --menu-bg:rgba(28,28,30,0.92);
     }
     body {
       font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary);
@@ -24,31 +24,35 @@
     }
     .app-container {
       width:100%; max-width:560px; height:100%; max-height:750px; display:flex;
-      flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s;
+      flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease;
     }
     @keyframes fadeSlideIn{0%{opacity:0;transform:translateY(12px);}100%{opacity:1;transform:translateY(0);}}
-    .navbar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;flex-shrink:0;z-index:20;}
-    .logo-link{text-decoration:none;color:var(--text-primary);font-size:1.3rem;font-weight:650;}
-    .nav-links{display:flex;gap:20px;}
-    .nav-links a{text-decoration:none;color:var(--accent);}
-    .burger-btn{display:none;flex-direction:column;width:44px;height:44px;background:transparent;border:none;gap:5px;padding:8px;}
-    .burger-btn span{display:block;width:22px;height:2px;background:var(--accent);border-radius:8px;transition:0.3s;}
+
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:8px 0; flex-shrink:0; z-index:20; }
+    .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.375rem; font-weight:650;
+      backdrop-filter:blur(10px); background:rgba(255,255,255,0.2); padding:6px 16px; border-radius:20px; }
+    .nav-links { display:flex; gap:12px; backdrop-filter:blur(10px); background:rgba(255,255,255,0.15); padding:4px; border-radius:24px; }
+    .nav-links a { text-decoration:none; color:var(--text-primary); font-weight:500; font-size:0.95rem; padding:8px 16px; border-radius:20px; }
+    .nav-links a:hover { background:rgba(0,122,255,0.15); color:var(--accent); }
+    .burger-btn { display:none; flex-direction:column; width:44px; height:44px; background:transparent; border:none; gap:5px; padding:8px; cursor:pointer; }
+    .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; }
     .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
     .burger-btn.open span:nth-child(2){opacity:0;}
     .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
     .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:0.35s;z-index:18;}
     .mobile-menu-overlay.active{opacity:1;visibility:visible;}
-    .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:rgba(255,255,255,0.9);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;}
-    body.dark .mobile-menu{background:rgba(28,28,30,0.95);}
+    .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:var(--menu-bg);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;}
     .mobile-menu.active{right:0;}
     .mobile-menu a{font-size:1.3rem;color:var(--text-primary);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--separator);}
-    .about-card{
-      background:var(--bg-card);backdrop-filter:var(--blur);border-radius:20px;
-      padding:40px 28px;box-shadow:var(--shadow);text-align:center;margin:auto 0;
+
+    .main-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; }
+    .about-card {
+      background:var(--bg-card); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+      border-radius:24px; padding:40px 28px; box-shadow:var(--shadow); text-align:center; max-width:400px;
     }
-    .about-card h2{font-size:2rem;margin-bottom:12px;}
-    .about-card p{color:var(--text-secondary);line-height:1.5;margin-bottom:20px;}
-    .footer{text-align:center;font-size:0.8rem;color:var(--text-secondary);flex-shrink:0;}
+    .about-card h2 { font-size:2rem; font-weight:600; margin-bottom:12px; }
+    .about-card p { color:var(--text-secondary); line-height:1.5; margin-bottom:20px; }
+    .footer { text-align:center; font-size:0.8rem; color:var(--text-secondary); flex-shrink:0; padding-bottom:6px; }
     @media(max-width:600px){body{padding:16px;}.nav-links{display:none;}.burger-btn{display:flex;}.app-container{max-height:100%;}}
   </style>
 </head>
@@ -56,26 +60,35 @@
 <div class="app-container">
   <div class="navbar">
     <a href="../index.html" class="logo-link">👋 Hello!</a>
-    <div class="nav-links"><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
+    <div class="nav-links">
+      <a href="../settings/">Настройки</a>
+      <a href="../about/">О проекте</a>
+    </div>
     <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
   </div>
-  <div class="about-card">
-    <h2>О разработчике</h2>
-    <p>Hello! — минималистичная стартовая страница с эстетикой iOS и быстрым доступом к поиску.</p>
-    <p style="font-size:0.85rem;">Версия 1.0 · Команда Hello.</p>
-    <a href="../settings/" style="color:var(--accent);">← Настройки</a>
+
+  <div class="main-content">
+    <div class="about-card">
+      <h2>О разработчике</h2>
+      <p>Hello! — это вкладка в стиле iOS 26 с динамическими обоями и молниеносным поиском.</p>
+      <p style="font-size:0.85rem;">Версия 1.0 · Команда Hello.</p>
+      <a href="../settings/" style="color:var(--accent); text-decoration:none; font-weight:500;">← Настройки</a>
+    </div>
   </div>
+
   <div class="footer">2026, «hello!».</div>
 </div>
+
 <div class="mobile-menu-overlay" id="overlay"></div>
 <div class="mobile-menu" id="mobileMenu"><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
+
 <script>
   (()=>{
     const body=document.body;
-    if(localStorage.getItem('hello-theme')==='dark')body.classList.add('dark');
+    if(localStorage.getItem('hello-theme')==='dark') body.classList.add('dark');
     const burger=document.getElementById('burgerBtn'), overlay=document.getElementById('overlay'), menu=document.getElementById('mobileMenu');
-    function close(){burger.classList.remove('open'); overlay.classList.remove('active'); menu.classList.remove('active');}
-    burger?.addEventListener('click',()=>menu.classList.contains('active')?close(): (burger.classList.add('open'),overlay.classList.add('active'),menu.classList.add('active')));
+    function close(){burger.classList.remove('open');overlay.classList.remove('active');menu.classList.remove('active');}
+    burger?.addEventListener('click',()=>menu.classList.contains('active')?close():(burger.classList.add('open'),overlay.classList.add('active'),menu.classList.add('active')));
     overlay?.addEventListener('click',close);
     menu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
   })();
