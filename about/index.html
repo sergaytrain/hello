@@ -19,43 +19,23 @@
             --separator:rgba(84,84,88,0.5); --shadow:0 8px 32px rgba(0,0,0,0.5);
             --menu-bg:rgba(28,28,30,0.92); --nav-bg:rgba(28,28,30,0.3);
         }
-        body {
-            font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary);
-            color:var(--text-primary); height:100vh; display:flex; align-items:center; justify-content:center;
-            transition:background var(--transition); overflow:hidden; padding:20px;
-        }
-        .app-container {
-            width:100%; max-width:560px; height:100%; max-height:750px; display:flex;
-            flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease;
-        }
+        body { font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary); color:var(--text-primary); height:100vh; display:flex; align-items:center; justify-content:center; transition:background var(--transition); overflow:hidden; padding:20px; }
+        .app-container { width:100%; max-width:560px; height:100%; max-height:750px; display:flex; flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease; }
         @keyframes fadeSlideIn{0%{opacity:0;transform:translateY(12px);}100%{opacity:1;transform:translateY(0);}}
-
         .navbar { display:flex; justify-content:space-between; align-items:center; padding:8px 0; flex-shrink:0; z-index:20; }
-        .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.375rem; font-weight:650;
-            backdrop-filter:blur(10px); background:var(--nav-bg); padding:6px 16px; border-radius:20px; box-shadow:0 0 10px var(--accent-glow); }
+        .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.375rem; font-weight:650; backdrop-filter:blur(10px); background:var(--nav-bg); padding:6px 16px; border-radius:20px; box-shadow:0 0 10px var(--accent-glow); }
         .nav-links { display:flex; gap:12px; backdrop-filter:blur(10px); background:var(--nav-bg); padding:4px; border-radius:24px; box-shadow:0 0 8px var(--accent-glow); }
-        .nav-links a { text-decoration:none; color:var(--text-primary); font-weight:500; font-size:0.95rem; padding:8px 16px; border-radius:20px; }
-        .nav-links a:hover { background:var(--accent); color:white; }
+        .nav-links a { text-decoration:none; color:var(--text-primary); font-weight:500; font-size:0.95rem; padding:8px 16px; border-radius:20px; } .nav-links a:hover { background:var(--accent); color:white; }
         .burger-btn { display:none; flex-direction:column; width:44px; height:44px; background:transparent; border:none; gap:5px; padding:8px; cursor:pointer; }
-        .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; }
-        .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-        .burger-btn.open span:nth-child(2){opacity:0;}
-        .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-        .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:0.35s;z-index:18;}
-        .mobile-menu-overlay.active{opacity:1;visibility:visible;}
-        .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:var(--menu-bg);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;}
-        .mobile-menu.active{right:0;}
+        .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; } .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);} .burger-btn.open span:nth-child(2){opacity:0;} .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+        .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:0.35s;z-index:18;} .mobile-menu-overlay.active{opacity:1;visibility:visible;}
+        .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:var(--menu-bg);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;} .mobile-menu.active{right:0;}
         .mobile-menu a{font-size:1.3rem;color:var(--text-primary);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--separator);}
-
         .main-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; }
-        .about-card {
-            background:var(--bg-card); backdrop-filter:var(--blur); border-radius:24px;
-            padding:40px 28px; box-shadow:var(--shadow),0 0 20px var(--accent-glow); text-align:center; max-width:400px;
-        }
+        .about-card { background:var(--bg-card); backdrop-filter:var(--blur); border-radius:24px; padding:40px 28px; box-shadow:var(--shadow),0 0 20px var(--accent-glow); text-align:center; max-width:400px; }
         .about-card h2 { font-size:2rem; font-weight:600; margin-bottom:12px; color:var(--accent); }
         .about-card p { color:var(--text-secondary); line-height:1.5; margin-bottom:20px; }
-        .footer { text-align:center; font-size:0.8rem; color:var(--text-secondary); flex-shrink:0; padding-bottom:6px; }
-        .footer a { color:var(--accent); text-decoration:none; }
+        .footer { text-align:center; font-size:0.8rem; color:var(--text-secondary); flex-shrink:0; padding-bottom:6px; } .footer a { color:var(--accent); text-decoration:none; }
         @media(max-width:600px){body{padding:16px;}.nav-links{display:none;}.burger-btn{display:flex;}.app-container{max-height:100%;}}
     </style>
 </head>
@@ -65,12 +45,12 @@
         <a href="../index.html" class="logo-link">👋 Hello!</a>
         <div class="nav-links">
             <a href="../news/">Новости</a>
+            <a href="../tutorial/">Туториалы</a>
             <a href="../settings/">Настройки</a>
             <a href="../about/">О проекте</a>
         </div>
         <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
     </div>
-
     <div class="main-content">
         <div class="about-card">
             <h2>О разработчике</h2>
@@ -82,7 +62,7 @@
     <div class="footer">2026, <a href="../about/">«hello!»</a>.</div>
 </div>
 <div class="mobile-menu-overlay" id="overlay"></div>
-<div class="mobile-menu" id="mobileMenu"><a href="../news/">Новости</a><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
+<div class="mobile-menu" id="mobileMenu"><a href="../news/">Новости</a><a href="../tutorial/">Туториалы</a><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
 <script>
     (()=>{
         const body=document.body;
