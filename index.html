@@ -174,7 +174,7 @@
             }
         });
 
-        // Динамический фон – теперь с проверкой через fetch HEAD (без ошибок в консоли)
+        // Динамический фон – абсолютно тихая проверка наличия файлов через fetch HEAD
         const bgLayer = document.getElementById('bgLayer');
         let validUrls = [];
         let currentIndex = 0;
@@ -197,9 +197,11 @@
                     const url = 'images/' + name;
                     try {
                         const head = await fetch(url, { method: 'HEAD' });
-                        if (head.ok) validUrls.push(url);
+                        if (head.ok) {
+                            validUrls.push(url);
+                        }
                     } catch (e) {
-                        // файл недоступен – пропускаем
+                        // Файл недоступен (нет прав, сеть) — ничего не делаем, не выводим в консоль
                     }
                 }
 
@@ -226,6 +228,7 @@
                 }, 15000);
 
             } catch (err) {
+                // Никаких логов, просто прячем фон
                 if (bgLayer) bgLayer.style.display = 'none';
             }
         }
