@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Hello! — Новая вкладка</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg-primary: #f2f2f7;
             --bg-card: rgba(255, 255, 255, 0.6);
@@ -29,7 +24,6 @@
             --menu-bg: rgba(255,255,255,0.9);
             --nav-bg: rgba(255,255,255,0.2);
         }
-
         body.dark {
             --bg-primary: #000000;
             --bg-card: rgba(28, 28, 30, 0.65);
@@ -45,7 +39,6 @@
             --menu-bg: rgba(28,28,30,0.92);
             --nav-bg: rgba(28,28,30,0.3);
         }
-
         body {
             font-family: -apple-system, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
             background-color: var(--bg-primary);
@@ -59,7 +52,6 @@
             position: relative;
             padding: 20px;
         }
-
         .bg-layer {
             position: fixed;
             inset: 0;
@@ -70,9 +62,7 @@
             opacity: 0;
             transition: opacity 0.8s ease-in-out;
         }
-        .bg-layer.active {
-            opacity: 1;
-        }
+        .bg-layer.active { opacity: 1; }
 
         .app-container {
             width: 100%;
@@ -87,12 +77,10 @@
             z-index: 2;
             animation: fadeSlideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
         @keyframes fadeSlideIn {
             0% { opacity: 0; transform: translateY(16px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-
         .navbar {
             width: 100%;
             display: flex;
@@ -103,7 +91,6 @@
             position: relative;
             z-index: 20;
         }
-
         .logo-link {
             text-decoration: none;
             color: var(--text-primary);
@@ -122,7 +109,6 @@
             box-shadow: 0 0 10px var(--accent-glow);
         }
         .logo-link:hover { opacity: 0.8; }
-
         .nav-links {
             display: flex;
             gap: 12px;
@@ -133,7 +119,6 @@
             border-radius: 24px;
             box-shadow: 0 0 8px var(--accent-glow);
         }
-
         .nav-links a {
             text-decoration: none;
             color: var(--text-primary);
@@ -148,7 +133,6 @@
             background: var(--accent);
             color: white;
         }
-
         .burger-btn {
             display: none;
             flex-direction: column;
@@ -174,7 +158,6 @@
         .burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
         .burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
         .mobile-menu-overlay {
             position: fixed;
             inset: 0;
@@ -186,11 +169,7 @@
             transition: opacity 0.35s ease, visibility 0.35s;
             z-index: 18;
         }
-        .mobile-menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -217,7 +196,6 @@
             padding: 14px 0;
             border-bottom: 1px solid var(--separator);
         }
-
         .main-content {
             flex: 1;
             display: flex;
@@ -227,7 +205,6 @@
             width: 100%;
             gap: 28px;
         }
-
         .big-logo {
             font-size: 4.2rem;
             font-weight: 580;
@@ -246,7 +223,6 @@
             0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-
         .search-wrapper {
             width: 100%;
             background: var(--bg-card);
@@ -263,7 +239,6 @@
             box-shadow: 0 12px 40px rgba(108, 92, 231, 0.3);
             border-color: var(--accent);
         }
-
         .search-input {
             width: 100%;
             border: none;
@@ -272,11 +247,7 @@
             color: var(--text-primary);
             outline: none;
         }
-        .search-input::placeholder {
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
+        .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
         .footer {
             flex-shrink: 0;
             text-align: center;
@@ -285,11 +256,7 @@
             color: var(--text-secondary);
             width: 100%;
         }
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
+        .footer a { color: var(--accent); text-decoration: none; }
         @media (max-width: 600px) {
             body { padding: 16px; }
             .nav-links { display: none; }
@@ -301,12 +268,12 @@
 </head>
 <body class="light">
 <div class="bg-layer" id="bgLayer"></div>
-
 <div class="app-container">
     <div class="navbar">
         <a href="index.html" class="logo-link">👋 Hello!</a>
         <div class="nav-links">
             <a href="news/">Новости</a>
+            <a href="tutorial/">Туториалы</a>
             <a href="settings/">Настройки</a>
             <a href="about/">О проекте</a>
         </div>
@@ -314,33 +281,29 @@
             <span></span><span></span><span></span>
         </button>
     </div>
-
     <div class="main-content">
         <div class="big-logo">Hello!</div>
         <div class="search-wrapper">
             <input type="text" class="search-input" placeholder="Введите ваш запрос." id="searchInput">
         </div>
     </div>
-
     <div class="footer">
         <p>2026, <a href="about/">«hello!»</a>.</p>
     </div>
 </div>
-
 <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 <div class="mobile-menu" id="mobileMenu">
     <a href="news/">Новости</a>
+    <a href="tutorial/">Туториалы</a>
     <a href="settings/">Настройки</a>
     <a href="about/">О проекте</a>
 </div>
-
 <script>
     (() => {
         const body = document.body;
         const savedTheme = localStorage.getItem('hello-theme');
         if (savedTheme === 'dark') body.classList.add('dark');
         else body.classList.remove('dark');
-
         const searchInput = document.getElementById('searchInput');
         searchInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -361,12 +324,10 @@
                 }
             }
         });
-
         const bgLayer = document.getElementById('bgLayer');
         let bgImages = [];
         let bgIndex = 0;
         let bgInterval = null;
-
         async function initDynamicBackground() {
             const enabled = localStorage.getItem('hello-dynamic-bg') === 'true';
             if (!enabled) {
@@ -392,24 +353,17 @@
                         }, 500);
                     }, 15000);
                 }
-            } catch (err) {
-                if (bgLayer) bgLayer.style.display = 'none';
-            }
+            } catch (err) { if (bgLayer) bgLayer.style.display = 'none'; }
         }
         initDynamicBackground();
-
         const burger = document.getElementById('burgerBtn');
         const overlay = document.getElementById('mobileMenuOverlay');
         const menu = document.getElementById('mobileMenu');
         function openMenu() {
-            burger.classList.add('open');
-            overlay.classList.add('active');
-            menu.classList.add('active');
+            burger.classList.add('open'); overlay.classList.add('active'); menu.classList.add('active');
         }
         function closeMenu() {
-            burger.classList.remove('open');
-            overlay.classList.remove('active');
-            menu.classList.remove('active');
+            burger.classList.remove('open'); overlay.classList.remove('active'); menu.classList.remove('active');
         }
         burger?.addEventListener('click', () => {
             menu.classList.contains('active') ? closeMenu() : openMenu();
