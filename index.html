@@ -304,6 +304,7 @@
         const savedTheme = localStorage.getItem('hello-theme');
         if (savedTheme === 'dark') body.classList.add('dark');
         else body.classList.remove('dark');
+
         const searchInput = document.getElementById('searchInput');
         searchInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -324,38 +325,75 @@
                 }
             }
         });
+
+        // Динамический фон с проверкой существования файлов
         const bgLayer = document.getElementById('bgLayer');
-        let bgImages = [];
-        let bgIndex = 0;
+        let validUrls = [];
+        let currentIndex = 0;
         let bgInterval = null;
+
         async function initDynamicBackground() {
             const enabled = localStorage.getItem('hello-dynamic-bg') === 'true';
-            if (!enabled) {
+            if (!enabled || !bgLayer) {
                 if (bgLayer) bgLayer.style.display = 'none';
                 return;
             }
             try {
                 const response = await fetch('images-list.json');
                 if (!response.ok) throw new Error('No images list');
-                bgImages = await response.json();
-                if (bgImages.length > 0) {
-                    bgLayer.style.display = 'block';
-                    bgLayer.style.backgroundImage = `url(${bgImages[0]})`;
-                    bgLayer.classList.add('active');
-                    bgIndex = 0;
-                    if (bgInterval) clearInterval(bgInterval);
-                    bgInterval = setInterval(() => {
-                        bgIndex = (bgIndex + 1) % bgImages.length;
-                        bgLayer.classList.remove('active');
-                        setTimeout(() => {
-                            bgLayer.style.backgroundImage = `url(${bgImages[bgIndex]})`;
-                            bgLayer.classList.add('active');
-                        }, 500);
-                    }, 15000);
+                const filenames = await response.json();
+                if (!Array.isArray(filenames) || filenames.length === 0) throw new Error('Empty list');
+
+                // Проверяем каждое имя файла, существует ли оно в папке images/
+                validUrls = [];
+                for (const name of filenames) {
+                    const url = 'images/' + name;
+                    try {
+                        await new Promise((resolve, reject) => {
+                            const img = new Image();
+                            img.onload = resolve;
+                            img.onerror = reject;
+                            img.src = url;
+                        });
+                        validUrls.push(url);
+                    } catch (e) {
+                        // Этот файл не загрузился, пропускаем
+                    }
                 }
-            } catch (err) { if (bgLayer) bgLayer.style.display = 'none'; }
+
+                if (validUrls.length === 0) {
+                    bgLayer.style.display = 'none';
+                    return;
+                }
+
+                // Показываем первый доступный фон
+                bgLayer.style.display = 'block';
+                function showImage(index) {
+                    bgLayer.style.backgroundImage = `url(${validUrls[index]})`;
+                    bgLayer.classList.add('active');
+                }
+                showImage(0);
+                currentIndex = 0;
+
+                // Запускаем смену фонов
+                if (bgInterval) clearInterval(bgInterval);
+                bgInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % validUrls.length;
+                    bgLayer.classList.remove('active');
+                    setTimeout(() => {
+                        showImage(currentIndex);
+                    }, 500);
+                }, 15000);
+
+            } catch (err) {
+                // Если что-то пошло не так (файл не найден, JSON битый) – скрываем фон
+                if (bgLayer) bgLayer.style.display = 'none';
+            }
         }
+
         initDynamicBackground();
+
+        // Бургер-меню
         const burger = document.getElementById('burgerBtn');
         const overlay = document.getElementById('mobileMenuOverlay');
         const menu = document.getElementById('mobileMenu');
