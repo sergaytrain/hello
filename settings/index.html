@@ -5,177 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Настройки — Hello!</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     :root {
-      --bg-primary: #f2f2f7;
-      --bg-card: rgba(255, 255, 255, 0.72);
-      --text-primary: #1c1c1e;
-      --text-secondary: #6e6e73;
-      --accent: #007aff;
-      --separator: rgba(60, 60, 67, 0.12);
-      --shadow: 0 8px 32px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
-      --blur: saturate(180%) blur(30px);
-      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --bg-primary:#f2f2f7; --bg-card:rgba(255,255,255,0.72); --text-primary:#1c1c1e;
+      --text-secondary:#6e6e73; --accent:#007aff; --separator:rgba(60,60,67,0.12);
+      --shadow:0 8px 32px rgba(0,0,0,0.04); --blur:saturate(180%) blur(30px);
+      --transition:0.35s cubic-bezier(0.4,0,0.2,1);
     }
     body.dark {
-      --bg-primary: #000000;
-      --bg-card: rgba(28,28,30,0.82);
-      --text-primary: #ffffff;
-      --text-secondary: #aeaeb2;
-      --accent: #0a84ff;
-      --separator: rgba(84,84,88,0.5);
-      --shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+      --bg-primary:#000; --bg-card:rgba(28,28,30,0.82); --text-primary:#fff;
+      --text-secondary:#aeaeb2; --accent:#0a84ff; --separator:rgba(84,84,88,0.5);
+      --shadow:0 8px 32px rgba(0,0,0,0.4);
     }
     body {
-      font-family: -apple-system, 'Helvetica Neue', 'SF Pro Text', system-ui, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background var(--transition), color var(--transition);
-      overflow: hidden;
-      padding: 20px;
+      font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary);
+      color:var(--text-primary); height:100vh; display:flex; align-items:center; justify-content:center;
+      transition:background var(--transition); overflow:hidden; padding:20px;
     }
     .app-container {
-      width: 100%;
-      max-width: 560px;
-      height: 100%;
-      max-height: 750px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      animation: fadeSlideIn 0.6s cubic-bezier(0.23,1,0.32,1);
+      width:100%; max-width:560px; height:100%; max-height:750px; display:flex;
+      flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease;
     }
-    @keyframes fadeSlideIn {
-      0% { opacity: 0; transform: translateY(12px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      flex-shrink: 0;
-    }
-    .logo-link {
-      text-decoration: none;
-      color: var(--text-primary);
-      font-size: 1.3rem;
-      font-weight: 650;
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--accent);
-      margin-left: 18px;
-      font-weight: 500;
-    }
-    .page-title {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .settings-list {
-      background: var(--bg-card);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .settings-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 18px;
-      border-bottom: 1px solid var(--separator);
-      font-size: 0.98rem;
-    }
-    .settings-item:last-child { border-bottom: none; }
-    .settings-item.clickable { cursor: pointer; }
-    .settings-item.clickable:hover { background: rgba(0,122,255,0.05); }
-    .settings-value { color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
-    .chevron { opacity: 0.6; }
-
-    .ios-toggle {
-      width: 51px; height: 31px; background: #e9e9ea; border-radius: 31px;
-      position: relative; cursor: pointer; transition: background 0.3s;
-    }
-    .ios-toggle.active { background: #34c759; }
-    .ios-toggle::after {
-      content: ""; position: absolute; width: 27px; height: 27px;
-      background: white; border-radius: 50%; top: 2px; left: 2px;
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .ios-toggle.active::after { transform: translateX(20px); }
-
-    .segment-control {
-      display: flex; background: rgba(120,120,128,0.16); border-radius: 8px; padding: 2px;
-    }
-    .segment-option {
-      padding: 6px 14px; border-radius: 7px; font-size: 0.9rem; font-weight: 500;
-      background: transparent; border: none; color: var(--text-primary); cursor: pointer;
-    }
-    .segment-option.active {
-      background: var(--bg-card); box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      backdrop-filter: blur(20px);
-    }
-
-    .engine-selector {
-      display: flex; flex-direction: column; gap: 4px; padding: 8px 0;
-    }
-    .engine-option {
-      display: flex; align-items: center; padding: 6px 0; cursor: pointer;
-    }
-    .radio-circle {
-      width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-secondary);
-      margin-right: 12px; display: flex; align-items: center; justify-content: center;
-    }
-    .radio-circle.selected { border-color: var(--accent); }
-    .radio-circle.selected::after {
-      content: ""; width: 12px; height: 12px; background: var(--accent);
-      border-radius: 50%; animation: pop 0.2s ease;
-    }
-    @keyframes pop { 0%{transform:scale(0);} 80%{transform:scale(1.2);} 100%{transform:scale(1);} }
-    .footer {
-      text-align: center; font-size: 0.8rem; color: var(--text-secondary);
-      flex-shrink: 0; padding-bottom: 6px;
-    }
+    @keyframes fadeSlideIn { 0%{opacity:0;transform:translateY(12px);} 100%{opacity:1;transform:translateY(0);} }
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:8px 0; flex-shrink:0; z-index:20; }
+    .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.3rem; font-weight:650; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { text-decoration:none; color:var(--accent); font-weight:500; }
+    .burger-btn { display:none; flex-direction:column; width:44px; height:44px; background:transparent; border:none; cursor:pointer; gap:5px; padding:8px; }
+    .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; }
+    .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .burger-btn.open span:nth-child(2){opacity:0;}
+    .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .mobile-menu-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.3); backdrop-filter:blur(4px); opacity:0; visibility:hidden; transition:0.35s; z-index:18; }
+    .mobile-menu-overlay.active { opacity:1; visibility:visible; }
+    .mobile-menu { position:fixed; top:0; right:-100%; width:280px; height:100%; background:rgba(255,255,255,0.9); backdrop-filter:blur(40px); box-shadow:-8px 0 30px rgba(0,0,0,0.12); z-index:22; display:flex; flex-direction:column; padding:32px 24px; transition:right 0.45s; gap:12px; }
+    body.dark .mobile-menu { background:rgba(28,28,30,0.95); }
+    .mobile-menu.active { right:0; }
+    .mobile-menu a { font-size:1.3rem; color:var(--text-primary); text-decoration:none; padding:14px 0; border-bottom:1px solid var(--separator); }
+    .page-title { font-size:1.6rem; font-weight:600; margin-bottom:16px; }
+    .settings-list { background:var(--bg-card); backdrop-filter:var(--blur); border-radius:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; margin-bottom:12px; }
+    .settings-item { display:flex; align-items:center; justify-content:space-between; padding:15px 18px; border-bottom:1px solid var(--separator); }
+    .settings-item:last-child{border-bottom:none;}
+    .ios-toggle { width:51px; height:31px; background:#e9e9ea; border-radius:31px; position:relative; cursor:pointer; }
+    .ios-toggle.active{background:#34c759;}
+    .ios-toggle::after{content:"";position:absolute;width:27px;height:27px;background:white;border-radius:50%;top:2px;left:2px;transition:0.25s;}
+    .ios-toggle.active::after{transform:translateX(20px);}
+    .segment-control{display:flex;background:rgba(120,120,128,0.16);border-radius:8px;padding:2px;}
+    .segment-option{padding:6px 14px;border-radius:7px;font-size:0.9rem;background:transparent;border:none;color:var(--text-primary);}
+    .segment-option.active{background:var(--bg-card);}
+    .radio-group{display:flex;flex-direction:column;gap:2px;}
+    .radio-option{display:flex;align-items:center;padding:8px 0;cursor:pointer;}
+    .radio-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--text-secondary);margin-right:12px;display:flex;align-items:center;justify-content:center;}
+    .radio-circle.selected{border-color:var(--accent);}
+    .radio-circle.selected::after{content:"";width:12px;height:12px;background:var(--accent);border-radius:50%;animation:pop 0.2s;}
+    @keyframes pop{0%{transform:scale(0);}80%{transform:scale(1.2);}100%{transform:scale(1);}}
+    .footer{text-align:center;font-size:0.8rem;color:var(--text-secondary);flex-shrink:0;}
+    @media(max-width:600px){body{padding:16px;}.nav-links{display:none;}.burger-btn{display:flex;}.app-container{max-height:100%;}}
   </style>
 </head>
 <body class="light">
 <div class="app-container">
   <div class="navbar">
     <a href="../index.html" class="logo-link">👋 Hello!</a>
-    <div class="nav-links">
-      <a href="../settings/">Настройки</a>
-      <a href="../about/">О проекте</a>
-    </div>
+    <div class="nav-links"><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
+    <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
   </div>
 
   <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
     <div class="page-title">Настройки</div>
-
-    <!-- Тема -->
     <div class="settings-list">
-      <div class="settings-item">
-        <span>Тема</span>
-        <div class="ios-toggle" id="themeToggle"></div>
-      </div>
+      <div class="settings-item"><span>Тема</span><div class="ios-toggle" id="themeToggle"></div></div>
     </div>
-
-    <!-- Язык -->
     <div class="settings-list" style="margin-top:16px;">
-      <div class="settings-item" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+      <div class="settings-item" style="flex-direction:column; align-items:flex-start; gap:12px;">
         <span>Язык</span>
         <div class="segment-control" id="languageSelector">
           <button class="segment-option" data-lang="ru">Русский</button>
@@ -184,142 +86,68 @@
         </div>
       </div>
     </div>
-
-    <!-- Системы поиска -->
     <div class="settings-list" style="margin-top:16px;">
-      <div class="settings-item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-        <span style="font-weight:500;">Система поиска</span>
-        <div class="engine-selector" id="engineContainer"></div>
+      <div class="settings-item" style="flex-direction:column; align-items:flex-start; gap:8px;">
+        <span>Система поиска</span>
+        <div class="radio-group" id="engineContainer"></div>
       </div>
     </div>
-
-    <!-- О разработчике -->
-    <div class="settings-list" style="margin-top:16px;">
-      <a href="../about/" style="text-decoration:none; color:inherit;" class="settings-item clickable">
-        <span>О разработчике</span>
-        <span class="settings-value">Подробнее <span class="chevron">›</span></span>
-      </a>
-    </div>
+    <a href="../about/" style="text-decoration:none; color:inherit;" class="settings-list" id="aboutLink">
+      <div class="settings-item clickable"><span>О разработчике</span><span class="settings-value">›</span></div>
+    </a>
   </div>
-
   <div class="footer">2026, hello!</div>
 </div>
 
+<div class="mobile-menu-overlay" id="overlay"></div>
+<div class="mobile-menu" id="mobileMenu"><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
+
 <script>
-  (function() {
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    const languageSelector = document.getElementById('languageSelector');
-    const engineContainer = document.getElementById('engineContainer');
-
-    const allEngines = {
-      yandex: 'Яндекс',
-      google: 'Google',
-      brave: 'Brave Search',
-      bing: 'Bing',
-      yahoo: 'Yahoo!',
-      baidu: 'Baidu',
-      '360search': '360 Search',
-      shenma: 'Shenma'
-    };
-
-    const chinaEngines = ['baidu', '360search', 'shenma'];
-    const defaultEngines = ['yandex', 'google', 'brave', 'bing', 'yahoo'];
-
-    function getCurrentLang() {
-      return localStorage.getItem('hello-lang') || 'ru';
+  (()=>{
+    const body=document.body;
+    const themeToggle=document.getElementById('themeToggle');
+    const engineContainer=document.getElementById('engineContainer');
+    const allEngines={yandex:'Яндекс',google:'Google',brave:'Brave Search',bing:'Bing',yahoo:'Yahoo!',baidu:'Baidu','360search':'360 Search',shenma:'Shenma'};
+    const china=['baidu','360search','shenma'];
+    const def=['yandex','google','brave','bing','yahoo'];
+    const getLang=()=>localStorage.getItem('hello-lang')||'ru';
+    const getTheme=()=>localStorage.getItem('hello-theme')||'light';
+    const getEngine=()=>localStorage.getItem('hello-search-engine')||'google';
+    function applyTheme(){
+      if(getTheme()==='dark'){body.classList.add('dark');themeToggle?.classList.add('active');}
+      else{body.classList.remove('dark');themeToggle?.classList.remove('active');}
     }
-    function getCurrentTheme() {
-      return localStorage.getItem('hello-theme') || 'light';
+    function renderEngines(){
+      if(!engineContainer)return;
+      const lang=getLang(); const cur=getEngine();
+      const list=(lang==='zh')?china:def;
+      engineContainer.innerHTML=list.map(k=>`<div class="radio-option" data-engine="${k}"><div class="radio-circle ${cur===k?'selected':''}"></div><span>${allEngines[k]}</span></div>`).join('');
+      document.querySelectorAll('.radio-option').forEach(o=>o.addEventListener('click',function(){
+        localStorage.setItem('hello-search-engine',this.dataset.engine); renderEngines();
+      }));
     }
-    function getCurrentEngine() {
-      return localStorage.getItem('hello-search-engine') || 'google';
-    }
-
-    function applyTheme() {
-      const theme = getCurrentTheme();
-      if (theme === 'dark') {
-        body.classList.add('dark');
-        body.classList.remove('light');
-        themeToggle?.classList.add('active');
-      } else {
-        body.classList.remove('dark');
-        body.classList.add('light');
-        themeToggle?.classList.remove('active');
-      }
-    }
-
-    function applyLanguageUI() {
-      const lang = getCurrentLang();
-      document.querySelectorAll('.segment-option').forEach(btn => {
-        if (btn.dataset.lang === lang) btn.classList.add('active');
-        else btn.classList.remove('active');
-      });
+    function applyLangUI(){
+      document.querySelectorAll('.segment-option').forEach(b=>b.classList.toggle('active',b.dataset.lang===getLang()));
       renderEngines();
     }
-
-    function renderEngines() {
-      if (!engineContainer) return;
-      const lang = getCurrentLang();
-      const currentEngine = getCurrentEngine();
-      let enginesToShow = (lang === 'zh') ? chinaEngines : defaultEngines;
-
-      engineContainer.innerHTML = enginesToShow.map(key => {
-        const name = allEngines[key] || key;
-        const selected = (currentEngine === key) ? 'selected' : '';
-        return `
-          <div class="engine-option" data-engine="${key}">
-            <div class="radio-circle ${selected}"></div>
-            <span>${name}</span>
-          </div>
-        `;
-      }).join('');
-
-      document.querySelectorAll('.engine-option').forEach(opt => {
-        opt.addEventListener('click', function(e) {
-          const engine = this.dataset.engine;
-          localStorage.setItem('hello-search-engine', engine);
-          renderEngines();
-        });
-      });
-    }
-
-    // Переключение темы
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        const newTheme = (getCurrentTheme() === 'dark') ? 'light' : 'dark';
-        localStorage.setItem('hello-theme', newTheme);
-        applyTheme();
-      });
-    }
-
-    // Выбор языка
-    if (languageSelector) {
-      languageSelector.addEventListener('click', (e) => {
-        if (e.target.classList.contains('segment-option')) {
-          const lang = e.target.dataset.lang;
-          localStorage.setItem('hello-lang', lang);
-          applyLanguageUI();
-          // Если выбран китайский, автоматически переключить поисковик на Baidu (если текущий не китайский)
-          if (lang === 'zh') {
-            const current = getCurrentEngine();
-            if (!chinaEngines.includes(current)) {
-              localStorage.setItem('hello-search-engine', 'baidu');
-            }
-          } else {
-            const current = getCurrentEngine();
-            if (chinaEngines.includes(current)) {
-              localStorage.setItem('hello-search-engine', 'google');
-            }
-          }
-          renderEngines();
-        }
-      });
-    }
-
-    // Инициализация
-    applyTheme();
-    applyLanguageUI();
+    themeToggle?.addEventListener('click',()=>{
+      const n=(getTheme()==='dark'?'light':'dark'); localStorage.setItem('hello-theme',n); applyTheme();
+    });
+    document.getElementById('languageSelector')?.addEventListener('click',e=>{
+      if(e.target.classList.contains('segment-option')){
+        const l=e.target.dataset.lang; localStorage.setItem('hello-lang',l);
+        if(l==='zh'&&!china.includes(getEngine())) localStorage.setItem('hello-search-engine','baidu');
+        else if(l!=='zh'&&china.includes(getEngine())) localStorage.setItem('hello-search-engine','google');
+        applyLangUI();
+      }
+    });
+    const burger=document.getElementById('burgerBtn'), overlay=document.getElementById('overlay'), menu=document.getElementById('mobileMenu');
+    function open(){burger.classList.add('open'); overlay.classList.add('active'); menu.classList.add('active');}
+    function close(){burger.classList.remove('open'); overlay.classList.remove('active'); menu.classList.remove('active');}
+    burger?.addEventListener('click',()=>menu.classList.contains('active')?close():open());
+    overlay?.addEventListener('click',close);
+    menu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+    applyTheme(); applyLangUI();
   })();
 </script>
 </body>
