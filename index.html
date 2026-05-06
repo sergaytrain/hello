@@ -96,24 +96,72 @@
         .mobile-menu { position: fixed; top: 0; right: -100%; width: 280px; height: 100%; background: var(--menu-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); box-shadow: -8px 0 30px rgba(0,0,0,0.12); z-index: 22; display: flex; flex-direction: column; padding: 32px 24px; transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1); gap: 12px; }
         .mobile-menu.active { right: 0; }
         .mobile-menu a { font-size: 1.3rem; font-weight: 500; color: var(--text-primary); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--separator); }
-        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 20px; }
+        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 20px; position: relative; }
         .big-logo { font-size: 4.2rem; font-weight: 580; letter-spacing: -0.04em; color: var(--text-primary); text-shadow: 0 0 15px var(--accent-glow); animation: logoReveal 0.7s ease-out; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         @keyframes logoReveal { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .search-area { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+        .search-area { width: 100%; position: relative; }
         .search-wrapper { width: 100%; background: var(--bg-card); backdrop-filter: var(--blur-strong); -webkit-backdrop-filter: var(--blur-strong); border-radius: var(--border-radius-card); box-shadow: var(--shadow-md), 0 0 20px var(--accent-glow); padding: 16px 20px; transition: all var(--transition); border: 1px solid rgba(108, 92, 231, 0.2); }
         .search-wrapper:focus-within { transform: scale(1.02); box-shadow: 0 12px 40px rgba(108, 92, 231, 0.3); border-color: var(--accent); }
         .search-input { width: 100%; border: none; background: transparent; font-size: 1.1rem; color: var(--text-primary); outline: none; }
         .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
-        .history { width: 100%; }
-        .history-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; margin-bottom: 6px; font-size: 0.95rem; transition: background 0.2s; }
+        .history-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            backdrop-filter: var(--blur-strong);
+            -webkit-backdrop-filter: var(--blur-strong);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md), 0 0 20px var(--accent-glow);
+            padding: 8px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: opacity 0.25s ease, visibility 0.25s, transform 0.25s ease;
+            z-index: 10;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+        .history-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: background 0.15s;
+            color: var(--text-primary);
+        }
         .history-item:hover { background: rgba(108, 92, 231, 0.1); }
-        .history-text { cursor: pointer; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; color: var(--text-primary); }
-        .history-delete { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem; padding: 0 4px; transition: color 0.2s; }
+        .history-icon {
+            margin-right: 12px;
+            font-size: 1.1rem;
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+        .history-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+        .history-delete {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            margin-left: 8px;
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
         .history-delete:hover { color: var(--accent); }
-        .iframe-container { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); display: flex; flex-direction: column; }
-        .iframe-header { display: flex; justify-content: flex-end; padding: 12px; }
-        .iframe-close, .iframe-open-tab { background: var(--accent); border: none; color: white; padding: 8px 16px; margin-left: 8px; border-radius: 20px; cursor: pointer; font-weight: 500; backdrop-filter: blur(10px); }
-        iframe { flex: 1; border: none; background: white; }
         .footer { flex-shrink: 0; text-align: center; padding: 16px 0 8px; font-size: 0.85rem; color: var(--text-secondary); width: 100%; }
         .footer a { color: var(--accent); text-decoration: none; }
         @media (max-width: 600px) {
@@ -143,10 +191,10 @@
     <div class="main-content">
         <div class="big-logo">Hello!</div>
         <div class="search-area">
-            <div class="search-wrapper">
+            <div class="search-wrapper" id="searchWrapper">
                 <input type="text" class="search-input" placeholder="Введите запрос или URL" id="searchInput" autocomplete="off" autofocus>
             </div>
-            <div class="history" id="historyContainer"></div>
+            <div class="history-dropdown" id="historyDropdown"></div>
         </div>
     </div>
     <div class="footer">
@@ -160,13 +208,6 @@
     <a href="settings/">Настройки</a>
     <a href="about/">О проекте</a>
 </div>
-<div class="iframe-container" id="iframeContainer" style="display: none;">
-    <div class="iframe-header">
-        <button class="iframe-open-tab" id="iframeOpenTab">Открыть в новой вкладке</button>
-        <button class="iframe-close" id="iframeClose">Закрыть</button>
-    </div>
-    <iframe id="searchIframe" sandbox="allow-scripts allow-popups allow-forms allow-same-origin"></iframe>
-</div>
 <script>
     (() => {
         const body = document.body;
@@ -175,71 +216,84 @@
         else body.classList.remove('dark');
 
         const searchInput = document.getElementById('searchInput');
-        const historyContainer = document.getElementById('historyContainer');
-        const iframeContainer = document.getElementById('iframeContainer');
-        const searchIframe = document.getElementById('searchIframe');
-        const iframeClose = document.getElementById('iframeClose');
-        const iframeOpenTab = document.getElementById('iframeOpenTab');
-        let currentSearchUrl = '';
-        let iframeTimeout = null;
+        const searchWrapper = document.getElementById('searchWrapper');
+        const historyDropdown = document.getElementById('historyDropdown');
 
         // Автофокус
         searchInput?.focus();
 
         // История поиска – максимум 5 элементов
-        let history = JSON.parse(localStorage.getItem('hello-search-history') || '[]');
         const MAX_HISTORY = 5;
+        let history = JSON.parse(localStorage.getItem('hello-search-history') || '[]');
 
         function saveHistory() {
             localStorage.setItem('hello-search-history', JSON.stringify(history));
         }
 
-        function renderHistory() {
-            if (!historyContainer) return;
+        function renderHistoryDropdown() {
+            if (!historyDropdown) return;
             if (history.length === 0) {
-                historyContainer.innerHTML = '';
+                historyDropdown.innerHTML = '';
+                historyDropdown.classList.remove('show');
                 return;
             }
-            historyContainer.innerHTML = history.map((entry, index) => `
-                <div class="history-item">
-                    <span class="history-text" data-index="${index}" title="${entry}">${entry}</span>
+            historyDropdown.innerHTML = history.map((entry, index) => `
+                <div class="history-item" data-query="${entry.replace(/"/g, '&quot;')}" data-index="${index}">
+                    <span class="history-icon">🕒</span>
+                    <span class="history-text">${entry}</span>
                     <button class="history-delete" data-index="${index}" aria-label="Удалить">✕</button>
                 </div>
             `).join('');
 
-            // Обработчики клика по тексту – вставка в строку поиска
-            historyContainer.querySelectorAll('.history-text').forEach(span => {
-                span.addEventListener('click', () => {
-                    searchInput.value = span.title;
-                    searchInput.focus();
+            // Клик по элементу – выполнить поиск
+            historyDropdown.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('history-delete')) return;
+                    const query = item.dataset.query;
+                    searchInput.value = '';
+                    performSearch(query);
+                    hideHistory();
                 });
             });
 
-            // Обработчики удаления
-            historyContainer.querySelectorAll('.history-delete').forEach(btn => {
+            // Кнопка удаления
+            historyDropdown.querySelectorAll('.history-delete').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const idx = parseInt(btn.dataset.index);
                     history.splice(idx, 1);
                     saveHistory();
-                    renderHistory();
+                    renderHistoryDropdown();
+                    // Если история опустела — скрываем
+                    if (history.length === 0) hideHistory();
                 });
             });
         }
 
+        function showHistory() {
+            if (history.length > 0 && searchInput.value.trim() === '') {
+                historyDropdown.classList.add('show');
+            }
+        }
+
+        function hideHistory() {
+            historyDropdown.classList.remove('show');
+        }
+
         function addToHistory(query) {
             if (!query.trim()) return;
-            // Удаляем дубликат, если есть
+            // Удаляем дубликат
             history = history.filter(item => item !== query);
             // Добавляем в начало
             history.unshift(query);
-            // Обрезаем до MAX_HISTORY
+            // Ограничиваем
             if (history.length > MAX_HISTORY) history.pop();
             saveHistory();
-            renderHistory();
+            renderHistoryDropdown();
         }
 
-        renderHistory();
+        // Инициализация
+        renderHistoryDropdown();
 
         // Определение URL
         function isUrl(text) {
@@ -251,69 +305,58 @@
             window.open(url, '_blank');
         }
 
-        function closeIframe() {
-            iframeContainer.style.display = 'none';
-            searchIframe.src = '';
-            if (iframeTimeout) clearTimeout(iframeTimeout);
-        }
-
         function performSearch(query) {
             if (!query.trim()) return;
             addToHistory(query);
             if (isUrl(query)) {
                 openInNewTab(query);
-                return;
+            } else {
+                const engine = localStorage.getItem('hello-search-engine') || 'google';
+                const urls = {
+                    yandex: 'https://yandex.ru/search/?text=',
+                    google: 'https://www.google.com/search?q=',
+                    brave: 'https://search.brave.com/search?q=',
+                    bing: 'https://www.bing.com/search?q=',
+                    yahoo: 'https://search.yahoo.com/search?p=',
+                    baidu: 'https://www.baidu.com/s?wd=',
+                    '360search': 'https://www.so.com/s?q=',
+                    shenma: 'https://m.sm.cn/s?q='
+                };
+                const url = (urls[engine] || urls.google) + encodeURIComponent(query);
+                window.open(url, '_blank');
             }
-            const engine = localStorage.getItem('hello-search-engine') || 'google';
-            const urls = {
-                yandex: 'https://yandex.ru/search/?text=',
-                google: 'https://www.google.com/search?q=',
-                brave: 'https://search.brave.com/search?q=',
-                bing: 'https://www.bing.com/search?q=',
-                yahoo: 'https://search.yahoo.com/search?p=',
-                baidu: 'https://www.baidu.com/s?wd=',
-                '360search': 'https://www.so.com/s?q=',
-                shenma: 'https://m.sm.cn/s?q='
-            };
-            currentSearchUrl = (urls[engine] || urls.google) + encodeURIComponent(query);
-            searchIframe.src = currentSearchUrl;
-            iframeContainer.style.display = 'flex';
-
-            // Таймер: если iframe не загрузился за 3 секунды, открываем в новой вкладке
-            if (iframeTimeout) clearTimeout(iframeTimeout);
-            iframeTimeout = setTimeout(() => {
-                // Проверяем, видим ли мы iframe (возможно, он уже закрыт)
-                if (iframeContainer.style.display === 'flex') {
-                    closeIframe();
-                    openInNewTab(currentSearchUrl);
-                }
-            }, 3000);
         }
 
-        // Событие загрузки iframe – если загрузился успешно, отменяем таймер
-        searchIframe.addEventListener('load', () => {
-            if (iframeTimeout) {
-                clearTimeout(iframeTimeout);
-                iframeTimeout = null;
-            }
-        });
-
+        // Обработка ввода
         searchInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 performSearch(searchInput.value);
                 searchInput.value = '';
+                hideHistory();
             }
         });
 
-        iframeClose?.addEventListener('click', closeIframe);
-        iframeOpenTab?.addEventListener('click', () => {
-            if (currentSearchUrl) window.open(currentSearchUrl, '_blank');
+        // Показывать историю при фокусе, если поле пустое
+        searchInput?.addEventListener('focus', () => {
+            showHistory();
         });
 
-        // Escape для закрытия iframe
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && iframeContainer.style.display === 'flex') {
-                closeIframe();
+        // Скрывать историю при потере фокуса (с задержкой, чтобы успеть кликнуть)
+        searchInput?.addEventListener('blur', () => {
+            setTimeout(() => {
+                // Если фокус ушёл не на элемент истории, скрываем
+                if (!historyDropdown.contains(document.activeElement)) {
+                    hideHistory();
+                }
+            }, 150);
+        });
+
+        // При вводе текста скрывать историю
+        searchInput?.addEventListener('input', () => {
+            if (searchInput.value.trim() !== '') {
+                hideHistory();
+            } else {
+                showHistory();
             }
         });
 
