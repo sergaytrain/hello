@@ -103,6 +103,14 @@
         .search-wrapper:focus-within { transform: scale(1.02); box-shadow: 0 12px 40px rgba(108, 92, 231, 0.3); border-color: var(--accent); }
         .search-input { width: 100%; border: none; background: transparent; font-size: 1.1rem; color: var(--text-primary); outline: none; }
         .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
+        .history { width: 100%; margin-top: 8px; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-card); backdrop-filter: blur(10px); border-radius: 12px; margin-bottom: 6px; font-size: 0.9rem; }
+        .history-item span { cursor: pointer; color: var(--text-primary); }
+        .history-item button { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 0.9rem; }
+        .iframe-container { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); display: flex; flex-direction: column; }
+        .iframe-header { display: flex; justify-content: flex-end; padding: 12px; }
+        .iframe-close, .iframe-open-tab { background: var(--accent); border: none; color: white; padding: 8px 16px; margin-left: 8px; border-radius: 20px; cursor: pointer; font-weight: 500; backdrop-filter: blur(10px); }
+        iframe { flex: 1; border: none; background: white; }
         .footer { flex-shrink: 0; text-align: center; padding: 16px 0 8px; font-size: 0.85rem; color: var(--text-secondary); width: 100%; }
         .footer a { color: var(--accent); text-decoration: none; }
         @media (max-width: 600px) {
@@ -129,11 +137,12 @@
             <span></span><span></span><span></span>
         </button>
     </div>
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
         <div class="big-logo">Hello!</div>
         <div class="search-wrapper">
-            <input type="text" class="search-input" placeholder="Введите ваш запрос." id="searchInput">
+            <input type="text" class="search-input" placeholder="Введите ваш запрос или ссылку" id="searchInput" autocomplete="off" autofocus>
         </div>
+        <div class="history" id="historyContainer"></div>
     </div>
     <div class="footer">
         <p>2026, <a href="about/">«hello!»</a>.</p>
@@ -146,6 +155,13 @@
     <a href="settings/">Настройки</a>
     <a href="about/">О проекте</a>
 </div>
+<div class="iframe-container" id="iframeContainer" style="display: none;">
+    <div class="iframe-header">
+        <button class="iframe-open-tab" id="iframeOpenTab">Открыть в новой вкладке</button>
+        <button class="iframe-close" id="iframeClose">Закрыть</button>
+    </div>
+    <iframe id="searchIframe" sandbox="allow-scripts allow-popups allow-forms allow-same-origin"></iframe>
+</div>
 <script>
     (() => {
         const body = document.body;
@@ -154,100 +170,146 @@
         else body.classList.remove('dark');
 
         const searchInput = document.getElementById('searchInput');
+        const historyContainer = document.getElementById('historyContainer');
+        const iframeContainer = document.getElementById('iframeContainer');
+        const searchIframe = document.getElementById('searchIframe');
+        const iframeClose = document.getElementById('iframeClose');
+        const iframeOpenTab = document.getElementById('iframeOpenTab');
+        let currentSearchUrl = '';
+
+        // Фокус на инпут при загрузке (уже autofocus, но подстрахуем)
+        searchInput?.focus();
+
+        // История поиска
+        let history = JSON.parse(localStorage.getItem('hello-search-history') || '[]');
+
+        function renderHistory() {
+            if (!historyContainer) return;
+            historyContainer.innerHTML = history.slice(0, 5).map((entry, index) => `
+                <div class="history-item">
+                    <span title="${entry}">${entry.length > 40 ? entry.slice(0, 40) + '...' : entry}</span>
+                    <button data-index="${index}">❌</button>
+                </div>
+            `).join('');
+            // Обработчики удаления
+            historyContainer.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.index);
+                    history.splice(idx, 1);
+                    localStorage.setItem('hello-search-history', JSON.stringify(history));
+                    renderHistory();
+                });
+            });
+            // Обработчики клика по тексту для вставки в инпут
+            historyContainer.querySelectorAll('span').forEach(span => {
+                span.addEventListener('click', () => {
+                    searchInput.value = span.title;
+                    searchInput.focus();
+                });
+            });
+        }
+        renderHistory();
+
+        function addToHistory(query) {
+            if (!query.trim()) return;
+            history = history.filter(item => item !== query);
+            history.unshift(query);
+            if (history.length > 20) history.pop();
+            localStorage.setItem('hello-search-history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function isUrl(text) {
+            return /^(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/i.test(text);
+        }
+
+        function openInNewTab(url) {
+            if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+            window.open(url, '_blank');
+        }
+
+        function performSearch(query) {
+            if (!query.trim()) return;
+            addToHistory(query);
+            if (isUrl(query)) {
+                openInNewTab(query);
+                return;
+            }
+            const engine = localStorage.getItem('hello-search-engine') || 'google';
+            const urls = {
+                yandex: 'https://yandex.ru/search/?text=',
+                google: 'https://www.google.com/search?q=',
+                brave: 'https://search.brave.com/search?q=',
+                bing: 'https://www.bing.com/search?q=',
+                yahoo: 'https://search.yahoo.com/search?p=',
+                baidu: 'https://www.baidu.com/s?wd=',
+                '360search': 'https://www.so.com/s?q=',
+                shenma: 'https://m.sm.cn/s?q='
+            };
+            currentSearchUrl = (urls[engine] || urls.google) + encodeURIComponent(query);
+            searchIframe.src = currentSearchUrl;
+            iframeContainer.style.display = 'flex';
+        }
+
         searchInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                const query = e.target.value.trim();
-                if (query) {
-                    const engine = localStorage.getItem('hello-search-engine') || 'google';
-                    const urls = {
-                        yandex: 'https://yandex.ru/search/?text=',
-                        google: 'https://www.google.com/search?q=',
-                        brave: 'https://search.brave.com/search?q=',
-                        bing: 'https://www.bing.com/search?q=',
-                        yahoo: 'https://search.yahoo.com/search?p=',
-                        baidu: 'https://www.baidu.com/s?wd=',
-                        '360search': 'https://www.so.com/s?q=',
-                        shenma: 'https://m.sm.cn/s?q='
-                    };
-                    window.location.href = (urls[engine] || urls.google) + encodeURIComponent(query);
-                }
+                performSearch(searchInput.value);
+                searchInput.value = '';
             }
         });
 
-        // Динамический фон – абсолютно тихая проверка наличия файлов через fetch HEAD
+        iframeClose?.addEventListener('click', () => {
+            iframeContainer.style.display = 'none';
+            searchIframe.src = '';
+        });
+
+        iframeOpenTab?.addEventListener('click', () => {
+            if (currentSearchUrl) window.open(currentSearchUrl, '_blank');
+        });
+
+        // Закрытие iframe по Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && iframeContainer.style.display === 'flex') {
+                iframeContainer.style.display = 'none';
+                searchIframe.src = '';
+            }
+        });
+
+        // Динамический фон (без изменений)
         const bgLayer = document.getElementById('bgLayer');
         let validUrls = [];
         let currentIndex = 0;
         let bgInterval = null;
-
         async function initDynamicBackground() {
             const enabled = localStorage.getItem('hello-dynamic-bg') === 'true';
-            if (!enabled || !bgLayer) {
-                if (bgLayer) bgLayer.style.display = 'none';
-                return;
-            }
+            if (!enabled || !bgLayer) { if (bgLayer) bgLayer.style.display = 'none'; return; }
             try {
                 const response = await fetch('images-list.json');
                 if (!response.ok) throw new Error('No images list');
                 const filenames = await response.json();
                 if (!Array.isArray(filenames) || filenames.length === 0) throw new Error('Empty list');
-
                 validUrls = [];
                 for (const name of filenames) {
                     const url = 'images/' + name;
-                    try {
-                        const head = await fetch(url, { method: 'HEAD' });
-                        if (head.ok) {
-                            validUrls.push(url);
-                        }
-                    } catch (e) {
-                        // Файл недоступен (нет прав, сеть) — ничего не делаем, не выводим в консоль
-                    }
+                    try { const head = await fetch(url, { method: 'HEAD' }); if (head.ok) validUrls.push(url); } catch (e) {}
                 }
-
-                if (validUrls.length === 0) {
-                    bgLayer.style.display = 'none';
-                    return;
-                }
-
+                if (validUrls.length === 0) { bgLayer.style.display = 'none'; return; }
                 bgLayer.style.display = 'block';
-                function showImage(index) {
-                    bgLayer.style.backgroundImage = `url(${validUrls[index]})`;
-                    bgLayer.classList.add('active');
-                }
-                showImage(0);
-                currentIndex = 0;
-
+                function showImage(index) { bgLayer.style.backgroundImage = `url(${validUrls[index]})`; bgLayer.classList.add('active'); }
+                showImage(0); currentIndex = 0;
                 if (bgInterval) clearInterval(bgInterval);
-                bgInterval = setInterval(() => {
-                    currentIndex = (currentIndex + 1) % validUrls.length;
-                    bgLayer.classList.remove('active');
-                    setTimeout(() => {
-                        showImage(currentIndex);
-                    }, 500);
-                }, 15000);
-
-            } catch (err) {
-                // Никаких логов, просто прячем фон
-                if (bgLayer) bgLayer.style.display = 'none';
-            }
+                bgInterval = setInterval(() => { currentIndex = (currentIndex + 1) % validUrls.length; bgLayer.classList.remove('active'); setTimeout(() => showImage(currentIndex), 500); }, 15000);
+            } catch (err) { if (bgLayer) bgLayer.style.display = 'none'; }
         }
-
         initDynamicBackground();
 
         // Бургер-меню
         const burger = document.getElementById('burgerBtn');
         const overlay = document.getElementById('mobileMenuOverlay');
         const menu = document.getElementById('mobileMenu');
-        function openMenu() {
-            burger.classList.add('open'); overlay.classList.add('active'); menu.classList.add('active');
-        }
-        function closeMenu() {
-            burger.classList.remove('open'); overlay.classList.remove('active'); menu.classList.remove('active');
-        }
-        burger?.addEventListener('click', () => {
-            menu.classList.contains('active') ? closeMenu() : openMenu();
-        });
+        function openMenu() { burger.classList.add('open'); overlay.classList.add('active'); menu.classList.add('active'); }
+        function closeMenu() { burger.classList.remove('open'); overlay.classList.remove('active'); menu.classList.remove('active'); }
+        burger?.addEventListener('click', () => { menu.classList.contains('active') ? closeMenu() : openMenu(); });
         overlay?.addEventListener('click', closeMenu);
         menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
     })();
