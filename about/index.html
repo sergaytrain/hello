@@ -2,44 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>О проекте — Hello!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        :root {
-            --bg-primary:#f2f2f7; --bg-card:rgba(255,255,255,0.6); --text-primary:#1c1c1e;
-            --text-secondary:#6e6e73; --accent:#6C5CE7; --accent-glow:rgba(108,92,231,0.3);
-            --separator:rgba(60,60,67,0.12); --shadow:0 8px 32px rgba(0,0,0,0.06);
-            --blur:saturate(220%) blur(40px); --transition:0.35s; --menu-bg:rgba(255,255,255,0.9);
-            --nav-bg:rgba(255,255,255,0.2);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0A0A0C; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding: 40px; display: flex; flex-direction: column; align-items: center; }
+        .app-container { width: 100%; max-width: 720px; animation: fadeInUp 0.6s; }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; background: rgba(255,255,255,0.03); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255,255,255,0.06); border-radius: 16px; margin-bottom: 40px; }
+        .logo-link { text-decoration: none; color: #fff; font-size: 1.25rem; font-weight: 600; padding-left: 20px; }
+        .nav-links { display: flex; gap: 32px; padding-right: 20px; }
+        .nav-links a { text-decoration: none; color: rgba(255,255,255,0.7); transition: 0.3s; }
+        .nav-links a:hover { color: #DCD0FF; transform: scale(1.05); }
+        .glass-card {
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.06); border-radius: 24px;
+            padding: 48px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            text-align: center;
         }
-        body.dark {
-            --bg-primary:#000; --bg-card:rgba(28,28,30,0.65); --text-primary:#fff;
-            --text-secondary:#aeaeb2; --accent:#8B7CF7; --accent-glow:rgba(139,124,247,0.35);
-            --separator:rgba(84,84,88,0.5); --shadow:0 8px 32px rgba(0,0,0,0.5);
-            --menu-bg:rgba(28,28,30,0.92); --nav-bg:rgba(28,28,30,0.3);
-        }
-        body { font-family:-apple-system,'SF Pro Text',system-ui,sans-serif; background:var(--bg-primary); color:var(--text-primary); height:100vh; display:flex; align-items:center; justify-content:center; transition:background var(--transition); overflow:hidden; padding:20px; }
-        .app-container { width:100%; max-width:560px; height:100%; max-height:750px; display:flex; flex-direction:column; justify-content:space-between; animation:fadeSlideIn 0.6s ease; }
-        @keyframes fadeSlideIn{0%{opacity:0;transform:translateY(12px);}100%{opacity:1;transform:translateY(0);}}
-        .navbar { display:flex; justify-content:space-between; align-items:center; padding:8px 0; flex-shrink:0; z-index:20; }
-        .logo-link { text-decoration:none; color:var(--text-primary); font-size:1.375rem; font-weight:650; backdrop-filter:blur(10px); background:var(--nav-bg); padding:6px 16px; border-radius:20px; box-shadow:0 0 10px var(--accent-glow); }
-        .nav-links { display:flex; gap:12px; backdrop-filter:blur(10px); background:var(--nav-bg); padding:4px; border-radius:24px; box-shadow:0 0 8px var(--accent-glow); }
-        .nav-links a { text-decoration:none; color:var(--text-primary); font-weight:500; font-size:0.95rem; padding:8px 16px; border-radius:20px; } .nav-links a:hover { background:var(--accent); color:white; }
-        .burger-btn { display:none; flex-direction:column; width:44px; height:44px; background:transparent; border:none; gap:5px; padding:8px; cursor:pointer; }
-        .burger-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:8px; transition:0.3s; } .burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);} .burger-btn.open span:nth-child(2){opacity:0;} .burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-        .mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:0.35s;z-index:18;} .mobile-menu-overlay.active{opacity:1;visibility:visible;}
-        .mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100%;background:var(--menu-bg);backdrop-filter:blur(40px);z-index:22;display:flex;flex-direction:column;padding:32px 24px;transition:right 0.45s;} .mobile-menu.active{right:0;}
-        .mobile-menu a{font-size:1.3rem;color:var(--text-primary);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--separator);}
-        .main-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; }
-        .about-card { background:var(--bg-card); backdrop-filter:var(--blur); border-radius:24px; padding:40px 28px; box-shadow:var(--shadow),0 0 20px var(--accent-glow); text-align:center; max-width:400px; }
-        .about-card h2 { font-size:2rem; font-weight:600; margin-bottom:12px; color:var(--accent); }
-        .about-card p { color:var(--text-secondary); line-height:1.5; margin-bottom:20px; }
-        .footer { text-align:center; font-size:0.8rem; color:var(--text-secondary); flex-shrink:0; padding-bottom:6px; } .footer a { color:var(--accent); text-decoration:none; }
-        @media(max-width:600px){body{padding:16px;}.nav-links{display:none;}.burger-btn{display:flex;}.app-container{max-height:100%;}}
+        .glass-card h2 { font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #DCD0FF, #87CEEB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 24px; }
+        .glass-card p { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.7); margin-bottom: 24px; }
+        .back-btn { display: inline-block; padding: 12px 28px; border-radius: 14px; background: rgba(255,255,255,0.05); color: #fff; text-decoration: none; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .back-btn:hover { background: rgba(255,255,255,0.1); border-color: #DCD0FF; }
+        .footer { margin-top: 40px; text-align: center; color: rgba(255,255,255,0.4); font-size: 0.85rem; }
     </style>
 </head>
-<body class="light">
+<body>
 <div class="app-container">
     <div class="navbar">
         <a href="../index.html" class="logo-link">👋 Hello!</a>
@@ -49,30 +38,14 @@
             <a href="../settings/">Настройки</a>
             <a href="../about/">О проекте</a>
         </div>
-        <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
     </div>
-    <div class="main-content">
-        <div class="about-card">
-            <h2>О разработчике</h2>
-            <p>Hello! — вкладка в стиле iOS 26 с динамическими обоями и молниеносным поиском. Создана для ценителей эстетики и скорости.</p>
-            <p style="font-size:0.85rem;">Версия 1.0 · Команда Hello.</p>
-            <a href="../settings/" style="color:var(--accent); text-decoration:none; font-weight:500;">← Настройки</a>
-        </div>
+    <div class="glass-card">
+        <h2>О проекте</h2>
+        <p>Hello! — это премиум-стартовая страница, созданная для ценителей эстетики и скорости. Глубокий тёмный фон, стеклянные элементы, неоновая акцентная палитра и безупречная типографика Inter делают каждое взаимодействие визуально совершенным.</p>
+        <p style="font-size: 0.9rem;">Дизайн вдохновлён лучшими интерфейсами Apple и Tesla. Версия 2.0</p>
+        <a href="../settings/" class="back-btn">← Настройки</a>
     </div>
-    <div class="footer">2026, <a href="../about/">«hello!»</a>.</div>
+    <div class="footer">2026 · Hello!</div>
 </div>
-<div class="mobile-menu-overlay" id="overlay"></div>
-<div class="mobile-menu" id="mobileMenu"><a href="../news/">Новости</a><a href="../tutorial/">Туториалы</a><a href="../settings/">Настройки</a><a href="../about/">О проекте</a></div>
-<script>
-    (()=>{
-        const body=document.body;
-        if(localStorage.getItem('hello-theme')==='dark') body.classList.add('dark');
-        const burger=document.getElementById('burgerBtn'), overlay=document.getElementById('overlay'), menu=document.getElementById('mobileMenu');
-        function close(){burger.classList.remove('open');overlay.classList.remove('active');menu.classList.remove('active');}
-        burger?.addEventListener('click',()=>menu.classList.contains('active')?close():(burger.classList.add('open'),overlay.classList.add('active'),menu.classList.add('active')));
-        overlay?.addEventListener('click',close);
-        menu?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
-    })();
-</script>
 </body>
 </html>
