@@ -3,138 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Hello! — Премиум поиск</title>
+    <title>Hello! — Премиум поиск с AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --bg: #0A0A0C;
+            --glass-bg: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.06);
+            --text: #fff;
+            --text-secondary: rgba(255,255,255,0.65);
+            --accent-start: #DCD0FF;
+            --accent-end: #87CEEB;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
         body {
-            background-color: #0A0A0C;
-            color: #fff;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
             height: 100vh;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
             padding: 20px;
             transition: 0.3s;
         }
         body.light {
-            background-color: #f2f2f7;
-            color: #1c1c1e;
+            --bg: #f2f2f7;
+            --glass-bg: rgba(0,0,0,0.02);
+            --glass-border: rgba(0,0,0,0.08);
+            --text: #1c1c1e;
+            --text-secondary: rgba(0,0,0,0.6);
         }
         .app-container {
-            width: 100%; max-width: 640px;
-            height: 100%; max-height: 800px;
-            display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center;
+            width: 100%;
+            max-width: 720px;
+            height: 100%;
+            max-height: 900px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             animation: fadeInUp 0.6s ease;
         }
         @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(24px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity:0; transform:translateY(24px); }
+            100% { opacity:1; transform:translateY(0); }
         }
-        /* Навигация */
         .navbar {
             width: 100%;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 16px 0;
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
             border-radius: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
-        .logo-link {
-            text-decoration: none; color: #fff;
-            font-size: 1.25rem; font-weight: 600;
-            display: flex; align-items: center; gap: 8px;
-            padding: 0 20px;
+        .logo-link { text-decoration:none; color:var(--text); font-size:1.25rem; font-weight:600; padding-left:20px; }
+        .nav-links { display:flex; gap:32px; padding-right:20px; }
+        .nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:500; transition:0.3s; }
+        .nav-links a:hover { color:var(--accent-start); transform:scale(1.05); }
+        .main-content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; }
+        .weather-block {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 10px 20px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            color: var(--text-secondary);
         }
-        .nav-links { display: flex; gap: 32px; padding-right: 20px; }
-        .nav-links a {
-            text-decoration: none; color: rgba(255,255,255,0.7); font-weight: 500;
-            font-size: 0.95rem; transition: 0.3s;
-        }
-        .nav-links a:hover {
-            color: #DCD0FF;
-            transform: scale(1.05);
-        }
-        /* Главный контент */
-        .main-content {
-            flex: 1; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            width: 100%; gap: 40px;
-        }
+        .weather-icon { font-size: 1.5rem; }
         .big-logo {
-            font-size: clamp(64px, 10vw, 120px); font-weight: 700;
+            font-size: clamp(64px, 10vw, 120px);
+            font-weight: 700;
             letter-spacing: -0.03em;
-            background: linear-gradient(135deg, #DCD0FF, #87CEEB);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1.1;
+            margin-bottom: 40px;
         }
-        .search-area { width: 100%; position: relative; }
+        .search-area { width:100%; position:relative; }
         .search-wrapper {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.08);
+            width:100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 18px 24px;
-            display: flex; align-items: center; gap: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.08);
-            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow), inset 0 1px 1px rgba(255,255,255,0.08);
+            transition: all 0.3s;
         }
         .search-wrapper:focus-within {
-            transform: scale(1.01);
             border-color: rgba(220,208,255,0.2);
             box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px rgba(220,208,255,0.15);
         }
-        .search-icon { font-size: 1.5rem; opacity: 0.5; }
+        .search-icon { font-size:1.5rem; opacity:0.6; }
         .search-input {
-            width: 100%; border: none; background: transparent;
-            font-size: 1.1rem; color: #fff; outline: none;
+            flex:1;
+            border:none;
+            background:transparent;
+            font-size:1.1rem;
+            color:var(--text);
+            outline:none;
             font-family: 'Inter', sans-serif;
         }
-        .search-input::placeholder { color: rgba(255,255,255,0.4); }
-        /* Выпадающая история */
-        .history-dropdown {
-            position: absolute; top: calc(100% + 8px); left: 0; right: 0;
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px; padding: 8px 0;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-            opacity: 0; visibility: hidden;
-            transform: translateY(-8px);
-            transition: 0.25s ease;
-            z-index: 10;
-            max-height: 260px; overflow-y: auto;
+        .search-input::placeholder { color: var(--text-secondary); opacity:0.7; }
+        .ai-button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
         }
-        .history-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        .history-item {
-            display: flex; align-items: center; padding: 12px 20px;
-            cursor: pointer; transition: background 0.2s;
+        .ai-button:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 18px rgba(220,208,255,0.5);
+            transform: scale(1.08);
         }
-        .history-item:hover { background: rgba(255,255,255,0.05); }
-        .history-icon { margin-right: 12px; opacity: 0.6; font-size: 1.1rem; }
-        .history-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .history-delete {
-            background: none; border: none; color: rgba(255,255,255,0.4);
-            cursor: pointer; font-size: 1.2rem; padding: 4px 8px; transition: 0.2s;
+        .ai-button .ai-glow {
+            position: absolute;
+            inset: -4px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #DCD0FF, #87CEEB);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
         }
-        .history-delete:hover { color: #DCD0FF; }
-        /* Футер */
-        .footer {
-            width: 100%; text-align: center;
-            padding: 20px 0; font-size: 0.8rem; color: rgba(255,255,255,0.4);
-            font-weight: 300;
+        .ai-button:hover .ai-glow { opacity: 0.15; }
+        .footer { width:100%; text-align:center; padding:20px 0 8px; font-size:0.8rem; color:var(--text-secondary); }
+        .footer a { color:var(--text-secondary); text-decoration:none; }
+
+        /* Модальное окно AI */
+        .ai-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
         }
-        .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
-        /* Адаптив */
-        @media (max-width: 600px) {
-            .nav-links { display: none; }
-            .burger-btn { display: flex; }
+        .ai-modal-overlay.active { opacity: 1; visibility: visible; }
+        .ai-modal {
+            width: 90%;
+            height: 90%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            overflow: hidden;
+            animation: modalIn 0.4s ease;
         }
-        .burger-btn { display: none; }
+        @keyframes modalIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .ai-header h3 { font-size: 1.3rem; font-weight: 600; }
+        .ai-close {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .ai-close:hover { color: var(--accent-start); }
+        .ai-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .msg {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } }
+        .msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #DCD0FF, #87CEEB);
+            color: #000;
+        }
+        .msg.assistant {
+            align-self: flex-start;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+        }
+        .ai-input-area {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .ai-input-area input {
+            flex: 1;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 14px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+        .ai-send {
+            background: linear-gradient(135deg, #DCD0FF, #87CEEB);
+            border: none;
+            border-radius: 16px;
+            padding: 14px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .ai-send:hover { opacity: 0.9; }
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 14px 18px;
+            background: var(--glass-bg);
+            border-radius: 18px;
+            align-self: flex-start;
+        }
+        .typing-indicator span {
+            width: 8px; height: 8px;
+            background: var(--accent-start);
+            border-radius: 50%;
+            animation: bounce 1s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.1s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.2s; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        @media (max-width:600px) {
+            .nav-links { display:none; }
+            .weather-block { font-size:0.9rem; }
+        }
     </style>
 </head>
 <body class="dark">
@@ -150,73 +300,58 @@
     </div>
 
     <div class="main-content">
+        <div class="weather-block" id="weatherBlock" style="display:none;"></div>
         <div class="big-logo">Hello!</div>
         <div class="search-area">
             <div class="search-wrapper" id="searchWrapper">
                 <span class="search-icon">🔍</span>
                 <input type="text" class="search-input" placeholder="Поиск в интернете…" id="searchInput" autocomplete="off" autofocus>
+                <button class="ai-button" id="aiButton">
+                    <span class="ai-glow"></span>
+                    ✨ AI
+                </button>
             </div>
-            <div class="history-dropdown" id="historyDropdown"></div>
         </div>
     </div>
 
     <div class="footer">2026 · <a href="about/">Hello!</a></div>
 </div>
 
+<!-- AI Modal -->
+<div class="ai-modal-overlay" id="aiOverlay">
+    <div class="ai-modal">
+        <div class="ai-header">
+            <h3>🤖 AI Assistant (DeepSeek)</h3>
+            <button class="ai-close" id="aiClose">✕</button>
+        </div>
+        <div class="ai-content">
+            <div class="messages" id="aiMessages"></div>
+            <div class="ai-input-area">
+                <input type="text" id="aiInput" placeholder="Спроси о чём-нибудь...">
+                <button class="ai-send" id="aiSend">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     (() => {
-        // Тема (dark по умолчанию)
+        // ====== Тема ======
         const body = document.body;
-        if (!localStorage.getItem('hello-theme')) localStorage.setItem('hello-theme', 'dark');
-        body.className = localStorage.getItem('hello-theme');
+        const theme = localStorage.getItem('hello-theme') || 'dark';
+        body.className = theme;
 
+        // ====== Поиск ======
         const searchInput = document.getElementById('searchInput');
-        const historyDropdown = document.getElementById('historyDropdown');
         const MAX_HISTORY = 5;
         let history = JSON.parse(localStorage.getItem('hello-search-history') || '[]');
-
-        function saveHistory() {
-            localStorage.setItem('hello-search-history', JSON.stringify(history));
-        }
-
-        function renderHistoryDropdown() {
-            if (!historyDropdown || history.length === 0) {
-                historyDropdown.classList.remove('show');
-                return;
-            }
-            historyDropdown.innerHTML = history.map((entry, i) => `
-                <div class="history-item" data-query="${entry.replace(/"/g, '&quot;')}" data-index="${i}">
-                    <span class="history-icon">🕒</span>
-                    <span class="history-text">${entry}</span>
-                    <button class="history-delete" data-index="${i}">✕</button>
-                </div>
-            `).join('');
-
-            historyDropdown.querySelectorAll('.history-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('history-delete')) return;
-                    performSearch(item.dataset.query);
-                });
-            });
-            historyDropdown.querySelectorAll('.history-delete').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    history.splice(parseInt(btn.dataset.index), 1);
-                    saveHistory();
-                    renderHistoryDropdown();
-                    if (history.length === 0) historyDropdown.classList.remove('show');
-                });
-            });
-        }
-        renderHistoryDropdown();
 
         function addToHistory(query) {
             if (!query.trim()) return;
             history = history.filter(item => item !== query);
             history.unshift(query);
             if (history.length > MAX_HISTORY) history.pop();
-            saveHistory();
-            renderHistoryDropdown();
+            localStorage.setItem('hello-search-history', JSON.stringify(history));
         }
 
         function isUrl(text) {
@@ -242,32 +377,141 @@
                 window.open((urls[engine] || urls.google) + encodeURIComponent(query), '_blank');
             }
             searchInput.value = '';
-            historyDropdown.classList.remove('show');
         }
 
-        searchInput.addEventListener('keypress', e => {
+        searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') performSearch(searchInput.value);
         });
 
-        searchInput.addEventListener('focus', () => {
-            if (history.length > 0 && searchInput.value.trim() === '') {
-                historyDropdown.classList.add('show');
+        // ====== Погода ======
+        async function loadWeather() {
+            const enabled = localStorage.getItem('hello-weather-enabled') === 'true';
+            const apiKey = localStorage.getItem('hello-weather-key');
+            const city = localStorage.getItem('hello-weather-city');
+            const block = document.getElementById('weatherBlock');
+            if (!enabled || !apiKey || !city) {
+                block.style.display = 'none';
+                return;
+            }
+            try {
+                const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=ru`);
+                if (!res.ok) throw new Error('Weather fetch error');
+                const data = await res.json();
+                const temp = Math.round(data.main.temp);
+                const desc = data.weather[0].description;
+                const iconCode = data.weather[0].icon;
+                block.style.display = 'flex';
+                block.innerHTML = `<span class="weather-icon"><img src="https://openweathermap.org/img/wn/${iconCode}.png" alt=""></span> ${city}: ${temp}°C, ${desc}`;
+            } catch (err) {
+                block.style.display = 'none';
+            }
+        }
+        loadWeather();
+
+        // ====== AI ======
+        const aiButton = document.getElementById('aiButton');
+        const aiOverlay = document.getElementById('aiOverlay');
+        const aiClose = document.getElementById('aiClose');
+        const aiMessages = document.getElementById('aiMessages');
+        const aiInput = document.getElementById('aiInput');
+        const aiSend = document.getElementById('aiSend');
+        let conversation = JSON.parse(localStorage.getItem('hello-ai-conversation') || '[]');
+        const OPENROUTER_KEY = localStorage.getItem('hello-openrouter-key') || '';
+        const MODEL = 'deepseek/deepseek-chat';
+
+        function saveConversation() {
+            localStorage.setItem('hello-ai-conversation', JSON.stringify(conversation));
+        }
+
+        function renderMessages() {
+            aiMessages.innerHTML = '';
+            conversation.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `msg ${msg.role}`;
+                div.textContent = msg.content;
+                aiMessages.appendChild(div);
+            });
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        async function sendToAI(userMessage) {
+            if (!OPENROUTER_KEY) {
+                alert('Добавьте API-ключ OpenRouter в настройках');
+                return;
+            }
+            conversation.push({ role: 'user', content: userMessage });
+            renderMessages();
+            saveConversation();
+
+            // Индикатор набора
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            aiMessages.appendChild(typing);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+
+            try {
+                const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${OPENROUTER_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        messages: conversation.map(msg => ({ role: msg.role, content: msg.content }))
+                    })
+                });
+                if (!res.ok) throw new Error('OpenRouter error');
+                const data = await res.json();
+                const reply = data.choices[0].message.content;
+                typing.remove();
+                conversation.push({ role: 'assistant', content: reply });
+                saveConversation();
+                renderMessages();
+            } catch (err) {
+                typing.remove();
+                alert('Ошибка AI: ' + err.message);
+            }
+        }
+
+        function openAIModal() {
+            const query = searchInput.value.trim();
+            aiOverlay.classList.add('active');
+            renderMessages();
+            if (query) {
+                sendToAI(query);
+                searchInput.value = '';
+            }
+        }
+
+        function closeAIModal() {
+            aiOverlay.classList.remove('active');
+        }
+
+        aiButton.addEventListener('click', openAIModal);
+        aiClose.addEventListener('click', closeAIModal);
+        aiOverlay.addEventListener('click', (e) => {
+            if (e.target === aiOverlay) closeAIModal();
+        });
+        aiSend.addEventListener('click', () => {
+            const text = aiInput.value.trim();
+            if (text) {
+                aiInput.value = '';
+                sendToAI(text);
             }
         });
-        searchInput.addEventListener('blur', () => {
-            setTimeout(() => {
-                if (!historyDropdown.contains(document.activeElement)) {
-                    historyDropdown.classList.remove('show');
-                }
-            }, 150);
-        });
-        searchInput.addEventListener('input', () => {
-            historyDropdown.classList.remove('show');
-            if (searchInput.value.trim() === '' && history.length > 0) {
-                historyDropdown.classList.add('show');
+        aiInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                aiSend.click();
             }
         });
-})();
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && aiOverlay.classList.contains('active')) {
+                closeAIModal();
+            }
+        });
+    })();
 </script>
 </body>
 </html>
