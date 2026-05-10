@@ -6,35 +6,35 @@
     <title>Настройки — Hello!</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0A0A0C; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding: 40px; display: flex; flex-direction: column; align-items: center; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0A0A0C; color: #fff; font-family: 'Inter', sans-serif;
+            min-height: 100vh; padding: 40px; display: flex; flex-direction: column; align-items: center;
+        }
         .app-container { width: 100%; max-width: 700px; animation: fadeInUp 0.6s; }
-        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; background: rgba(255,255,255,0.03); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255,255,255,0.06); border-radius: 16px; margin-bottom: 40px; }
-        .logo-link { text-decoration: none; color: #fff; font-size: 1.25rem; font-weight: 600; padding-left: 20px; }
-        .nav-links { display: flex; gap: 32px; padding-right: 20px; }
-        .nav-links a { text-decoration: none; color: rgba(255,255,255,0.7); transition: 0.3s; }
-        .nav-links a:hover { color: #DCD0FF; transform: scale(1.05); }
-        .page-title { font-size: 2rem; font-weight: 600; margin-bottom: 32px; }
+        @keyframes fadeInUp { 0% { opacity:0; transform:translateY(24px); } 100% { opacity:1; transform:translateY(0); } }
+        .navbar { display:flex; justify-content:space-between; align-items:center; padding:16px 0; background: rgba(255,255,255,0.03); backdrop-filter: blur(25px); border-bottom:1px solid rgba(255,255,255,0.06); border-radius:16px; margin-bottom:40px; }
+        .logo-link { text-decoration:none; color:#fff; font-size:1.25rem; font-weight:600; padding-left:20px; }
+        .nav-links { display:flex; gap:32px; padding-right:20px; }
+        .nav-links a { text-decoration:none; color:rgba(255,255,255,0.7); transition:0.3s; }
+        .nav-links a:hover { color:#DCD0FF; transform:scale(1.05); }
+        .page-title { font-size:2rem; font-weight:600; margin-bottom:32px; }
         .settings-panel {
             background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
-            padding: 20px 24px; margin-bottom: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            border:1px solid rgba(255,255,255,0.06); border-radius:20px;
+            padding:20px 24px; margin-bottom:24px; box-shadow:0 8px 32px rgba(0,0,0,0.4);
         }
-        .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
-        .settings-row + .settings-row { border-top: 1px solid rgba(255,255,255,0.05); }
-        .switch { position: relative; width: 52px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 32px; cursor: pointer; transition: 0.3s; }
-        .switch.active { background: linear-gradient(135deg, #DCD0FF, #87CEEB); }
-        .switch::after { content: ''; position: absolute; width: 28px; height: 28px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: 0.3s; }
-        .switch.active::after { left: 22px; }
-        .segment { display: flex; background: rgba(255,255,255,0.05); border-radius: 14px; padding: 4px; }
-        .segment-btn { padding: 8px 16px; border-radius: 10px; background: transparent; border: none; color: rgba(255,255,255,0.6); font-weight: 500; cursor: pointer; transition: 0.3s; }
-        .segment-btn.active { background: linear-gradient(135deg, #DCD0FF, #87CEEB); color: #0A0A0C; }
-        .radio-group { display: flex; flex-direction: column; gap: 8px; }
-        .radio-option { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .radio-circle { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; transition: 0.2s; }
-        .radio-circle.selected { border-color: #DCD0FF; background: linear-gradient(135deg, #DCD0FF, #87CEEB); }
+        .settings-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
+        .settings-row + .settings-row { border-top:1px solid rgba(255,255,255,0.05); }
+        .switch { position:relative; width:52px; height:32px; background:rgba(255,255,255,0.1); border-radius:32px; cursor:pointer; transition:0.3s; }
+        .switch.active { background:linear-gradient(135deg, #DCD0FF, #87CEEB); }
+        .switch::after { content:''; position:absolute; width:28px; height:28px; background:white; border-radius:50%; top:2px; left:2px; transition:0.3s; }
+        .switch.active::after { left:22px; }
+        .api-input { width:100%; margin-top:8px; padding:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:12px; color:#fff; font-family:'Inter'; }
+        select.api-input { appearance:none; }
+        .sub-label { font-size:0.9rem; color:rgba(255,255,255,0.5); margin:4px 0 8px; }
+        .button-sm { padding:8px 16px; border-radius:10px; background:rgba(255,255,255,0.08); border:none; color:#fff; cursor:pointer; transition:0.2s; }
+        .button-sm:hover { background:rgba(255,255,255,0.15); }
     </style>
 </head>
 <body>
@@ -50,21 +50,44 @@
     </div>
     <div class="page-title">Настройки</div>
 
+    <!-- Основные -->
     <div class="settings-panel">
         <div class="settings-row"><span>Тема</span><div class="switch" id="themeToggle"></div></div>
         <div class="settings-row"><span>Динамичный фон</span><div class="switch" id="dynamicBgToggle"></div></div>
     </div>
 
+    <!-- Погода -->
     <div class="settings-panel">
-        <div class="settings-row" style="flex-direction: column; align-items: flex-start; gap: 12px;">
-            <span>Язык</span>
-            <div class="segment" id="langSegment"></div>
+        <div class="settings-row">
+            <span>Погода</span>
+            <div class="switch" id="weatherToggle"></div>
+        </div>
+        <div id="weatherSettings" style="display:none;">
+            <div class="sub-label">API-ключ OpenWeather</div>
+            <input type="password" class="api-input" id="weatherKey" placeholder="Введите ключ">
+            <div class="sub-label">Город (на английском)</div>
+            <input type="text" class="api-input" id="weatherCity" placeholder="Moscow">
+            <button class="button-sm" id="saveWeatherBtn" style="margin-top:8px;">Сохранить</button>
         </div>
     </div>
 
+    <!-- AI -->
+    <div class="settings-panel">
+        <div class="settings-row">
+            <span>ИИ-ассистент</span>
+            <div class="switch" id="aiToggle"></div>
+        </div>
+        <div id="aiSettings" style="display:none;">
+            <div class="sub-label">API-ключ OpenRouter</div>
+            <input type="password" class="api-input" id="aiKey" placeholder="Введите ключ">
+            <button class="button-sm" id="saveAiBtn" style="margin-top:8px;">Сохранить</button>
+        </div>
+    </div>
+
+    <!-- Поиск -->
     <div class="settings-panel">
         <span style="display:block; margin-bottom:12px;">Система поиска</span>
-        <div class="radio-group" id="engineList"></div>
+        <div id="engineList" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
     </div>
 
     <a href="../about/" style="text-decoration:none; color:inherit;">
@@ -73,14 +96,23 @@
         </div>
     </a>
 </div>
+
 <script>
-    // Сохранение темы, языка и т.д.
     (() => {
         const themeToggle = document.getElementById('themeToggle');
         const dynamicBgToggle = document.getElementById('dynamicBgToggle');
-        const langSegment = document.getElementById('langSegment');
+        const weatherToggle = document.getElementById('weatherToggle');
+        const weatherSettings = document.getElementById('weatherSettings');
+        const weatherKey = document.getElementById('weatherKey');
+        const weatherCity = document.getElementById('weatherCity');
+        const saveWeatherBtn = document.getElementById('saveWeatherBtn');
+        const aiToggle = document.getElementById('aiToggle');
+        const aiSettings = document.getElementById('aiSettings');
+        const aiKey = document.getElementById('aiKey');
+        const saveAiBtn = document.getElementById('saveAiBtn');
         const engineList = document.getElementById('engineList');
 
+        // Тема
         function applyTheme() {
             const dark = localStorage.getItem('hello-theme') === 'dark';
             document.body.className = dark ? 'dark' : 'light';
@@ -91,7 +123,49 @@
             localStorage.setItem('hello-theme', newTheme);
             applyTheme();
         });
+        applyTheme();
 
+        // Динамический фон
+        dynamicBgToggle.addEventListener('click', () => {
+            const cur = localStorage.getItem('hello-dynamic-bg') !== 'false';
+            localStorage.setItem('hello-dynamic-bg', !cur);
+            dynamicBgToggle.classList.toggle('active', !cur);
+        });
+        dynamicBgToggle.classList.toggle('active', localStorage.getItem('hello-dynamic-bg') !== 'false');
+
+        // Погода
+        weatherToggle.classList.toggle('active', localStorage.getItem('hello-weather-enabled') === 'true');
+        weatherSettings.style.display = weatherToggle.classList.contains('active') ? 'block' : 'none';
+        weatherKey.value = localStorage.getItem('hello-weather-key') || '';
+        weatherCity.value = localStorage.getItem('hello-weather-city') || 'Moscow';
+
+        weatherToggle.addEventListener('click', () => {
+            const active = weatherToggle.classList.toggle('active');
+            localStorage.setItem('hello-weather-enabled', active);
+            weatherSettings.style.display = active ? 'block' : 'none';
+        });
+        saveWeatherBtn.addEventListener('click', () => {
+            localStorage.setItem('hello-weather-key', weatherKey.value);
+            localStorage.setItem('hello-weather-city', weatherCity.value || 'Moscow');
+            alert('Сохранено');
+        });
+
+        // AI
+        aiToggle.classList.toggle('active', localStorage.getItem('hello-ai-enabled') === 'true');
+        aiSettings.style.display = aiToggle.classList.contains('active') ? 'block' : 'none';
+        aiKey.value = localStorage.getItem('hello-openrouter-key') || '';
+
+        aiToggle.addEventListener('click', () => {
+            const active = aiToggle.classList.toggle('active');
+            localStorage.setItem('hello-ai-enabled', active);
+            aiSettings.style.display = active ? 'block' : 'none';
+        });
+        saveAiBtn.addEventListener('click', () => {
+            localStorage.setItem('hello-openrouter-key', aiKey.value);
+            alert('Сохранено');
+        });
+
+        // Поисковая система
         const engines = {
             yandex: 'Яндекс', google: 'Google', brave: 'Brave', bing: 'Bing', yahoo: 'Yahoo!',
             baidu: 'Baidu', '360search': '360 Search', shenma: 'Shenma'
@@ -99,41 +173,15 @@
         function renderEngines() {
             const cur = localStorage.getItem('hello-search-engine') || 'google';
             engineList.innerHTML = Object.entries(engines).map(([k,v]) => `
-                <div class="radio-option" data-engine="${k}">
-                    <div class="radio-circle ${k === cur ? 'selected' : ''}"></div> ${v}
-                </div>
+                <button class="button-sm" data-engine="${k}" style="font-weight:${k===cur?'600':'400'}; background:${k===cur?'rgba(220,208,255,0.15)':'rgba(255,255,255,0.05)'}">${v}</button>
             `).join('');
-            document.querySelectorAll('.radio-option').forEach(opt => {
-                opt.addEventListener('click', () => {
-                    localStorage.setItem('hello-search-engine', opt.dataset.engine);
+            document.querySelectorAll('#engineList button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    localStorage.setItem('hello-search-engine', btn.dataset.engine);
                     renderEngines();
                 });
             });
         }
-
-        function renderLang() {
-            const langs = ['ru', 'en', 'zh'];
-            const cur = localStorage.getItem('hello-lang') || 'ru';
-            langSegment.innerHTML = langs.map(l => `
-                <button class="segment-btn ${l === cur ? 'active' : ''}" data-lang="${l}">${l.toUpperCase()}</button>
-            `).join('');
-            document.querySelectorAll('.segment-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    localStorage.setItem('hello-lang', btn.dataset.lang);
-                    renderLang();
-                });
-            });
-        }
-
-        dynamicBgToggle.addEventListener('click', () => {
-            const cur = localStorage.getItem('hello-dynamic-bg') !== 'false';
-            localStorage.setItem('hello-dynamic-bg', !cur);
-            dynamicBgToggle.classList.toggle('active', !cur);
-        });
-
-        applyTheme();
-        dynamicBgToggle.classList.toggle('active', localStorage.getItem('hello-dynamic-bg') !== 'false');
-        renderLang();
         renderEngines();
     })();
 </script>
