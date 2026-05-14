@@ -423,4 +423,25 @@
             const q = searchInput.value.trim();
             if (q) { sendToAI(q); searchInput.value = ''; }
         });
-        aiClose.addEventLi
+        aiClose.addEventListener('click', () => aiOverlay.classList.remove('active'));
+        aiOverlay.addEventListener('click', (e) => { if (e.target === aiOverlay) aiOverlay.classList.remove('active'); });
+        aiSend.addEventListener('click', () => {
+            const text = aiInput.value.trim();
+            if (text) { aiInput.value = ''; sendToAI(text); }
+        });
+        aiInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') aiSend.click(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && aiOverlay.classList.contains('active')) aiOverlay.classList.remove('active'); });
+
+        // Бургер-меню
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileMenu = document.getElementById('mobileMenu');
+        function openMenu() { burgerBtn.classList.add('open'); mobileOverlay.classList.add('active'); mobileMenu.classList.add('active'); }
+        function closeMenu() { burgerBtn.classList.remove('open'); mobileOverlay.classList.remove('active'); mobileMenu.classList.remove('active'); }
+        burgerBtn.addEventListener('click', () => mobileMenu.classList.contains('active') ? closeMenu() : openMenu());
+        mobileOverlay.addEventListener('click', closeMenu);
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    })();
+</script>
+</body>
+</html>
